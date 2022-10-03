@@ -1,6 +1,6 @@
 {
   "name": "@paybyrd/card-collect",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0",
   "description": "Paybyrd's tool to aid in the creation of credit card info collect forms",
   "main": "dist/cardCollect.js",
   "repository": {
