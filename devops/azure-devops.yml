@@ -28,10 +28,7 @@ resources:
       ref: refs/tags/1.13.1
 
 variables:
-  group: npm
-  version_major: 1
-  version_minor: 0
-  version_patch: 0
+  - template: variables.yml
  
 stages:
 - template: stages/prepare.yml@templates
@@ -40,7 +37,7 @@ stages:
   - job: BuildJob
     steps:
     - task: replacetokens@5
-      name: deploy_replace_tokens
+      name: ReplaceFile
       inputs:
         rootDirectory: '.'
         targetFiles: '.npmrc'
