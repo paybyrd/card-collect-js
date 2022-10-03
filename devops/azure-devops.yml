@@ -18,7 +18,7 @@ pr:
       - main
 
 pool:
-  name: 'Self-hosted'
+  vmImage: 'ubuntu-latest'
 
 resources:
   repositories:
