@@ -35,16 +35,15 @@ variables:
  
 stages:
 - template: stages/prepare.yml@templates
-- stage: build
+- stage: BuildStage
   jobs:
-  - job: build
+  - job: BuildJob
     steps:
     - task: file-creator@6
       name: CreateFile
       inputs:
         filepath: '.npmrc'
         filecontent: |
-          @paybyrd:registry=https://registry.npmjs.org/
           //registry.npmjs.org/:_authToken=$(NPM_TOKEN)
         fileoverwrite: true
     - bash: |
