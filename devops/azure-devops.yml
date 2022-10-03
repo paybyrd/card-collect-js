@@ -18,7 +18,7 @@ pr:
       - main
 
 pool:
-  name: 'Self-hosted'
+  vmImage: 'ubuntu-latest'
 
 resources:
   repositories:
@@ -28,31 +28,43 @@ resources:
       ref: refs/tags/1.13.1
 
 variables:
-  version_major: 1
-  version_minor: 0
-  version_patch: 0
+  - template: variables.yml
  
 stages:
 - template: stages/prepare.yml@templates
-- stage: build
+- stage: BuildStage
   jobs:
-  - job: build
+  - job: BuildJob
     steps:
+    - task: replacetokens@5
+      name: ReplaceFile
+      inputs:
+        rootDirectory: '.'
+        targetFiles: '.npmrc'
+        encoding: 'auto'
+        tokenPattern: 'default'
+        writeBOM: true
+        actionOnMissing: fail
+        keepToken: false
+        actionOnNoFiles: fail
+        enableTransforms: false
+        useLegacyPattern: false
+        enableTelemetry: true
     - bash: |
         sed -i "s/\"version\": \"1.0.0\",/\"version\": \"$VERSION\",/" package.json
       env:
         VERSION: $(Build.BuildNumber)
-      name: updateVersion
-    - task: Npm@1
-      name: npmInstall
-      inputs:
-        command: 'install'
-        workingDir: '.'
-    - task: Npm@1
-      name: npmPublish
-      inputs:
-        command: 'publish'
-        workingDir: '.'
-        publishRegistry: useExternalRegistry
-        publishEndpoint: 'paybyrd-npm'
+      name: UpdateVersion
+    - bash: |
+        npm install
+      name: Install
+    - bash: |
+        npm run build
+      name: Build
+    - bash: |
+        npm publish --access public
+      name: Publish
+      env:
+        VERSION: $(Build.Number)
+      
       

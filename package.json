@@ -1,30 +1,45 @@
 {
-	"name": "@paybyrd/card-collect",
-	"version": "1.0.0",
-	"description": "Paybyrd's tool to aid in the creation of credit card info collect forms",
-	"main": "index.js",
-	"license": "MIT",
-	"scripts": {
-		"dev": "env-cmd -e development webpack serve --mode development",
-		"build": "cross-env NODE_ENV=production env-cmd -e production webpack --mode production",
-		"stage": "cross-env NODE_ENV=production env-cmd -e stage webpack --mode production"
-	},
-	"dependencies": {
-		"@vgs/collect-js": "^0.6.1"
-	},
-	"devDependencies": {
-		"@babel/core": "^7.18.10",
-		"@babel/preset-env": "^7.18.10",
-		"babel-loader": "^8.2.5",
-		"cross-env": "^7.0.3",
-		"css-loader": "^6.7.1",
-		"env-cmd": "^10.1.0",
-		"eslint": "^8.21.0",
-		"eslint-webpack-plugin": "^3.2.0",
-		"html-webpack-plugin": "^5.5.0",
-		"style-loader": "^3.3.1",
-		"webpack": "^5.74.0",
-		"webpack-cli": "^4.10.0",
-		"webpack-dev-server": "^4.9.3"
-	}
+  "name": "@paybyrd/card-collect",
+  "version": "1.0.0",
+  "description": "Paybyrd's tool to aid in the creation of credit card info collect forms",
+  "main": "dist/cardCollect.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paybyrd/card-collect-js.git"
+  },
+  "scripts": {
+    "dev": "env-cmd -e development webpack serve --mode development",
+    "build": "cross-env NODE_ENV=production env-cmd -e production webpack --mode production",
+    "stage": "cross-env NODE_ENV=production env-cmd -e stage webpack --mode production"
+  },
+  "keywords": [
+    "card",
+    "collect",
+    "security",
+    "paybyrd"
+  ],
+  "author": "tiago.resende@paybyrd.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paybyrd/card-collect-js/issues"
+  },
+  "homepage": "https://github.com/paybyrd/card-collect-js#readme",
+  "dependencies": {
+    "@vgs/collect-js": "^0.6.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.10",
+    "@babel/preset-env": "^7.18.10",
+    "babel-loader": "^8.2.5",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.7.1",
+    "env-cmd": "^10.1.0",
+    "eslint": "^8.21.0",
+    "eslint-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.9.3"
+  }
 }
