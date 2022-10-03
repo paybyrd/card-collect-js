@@ -59,7 +59,7 @@ stages:
         npm run build
       name: Build
     - bash: |
-        npm publish --public
+        npm publish --access public
       name: Publish
       env:
         VERSION: $(Build.Number)
