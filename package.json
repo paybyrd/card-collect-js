@@ -1,14 +1,29 @@
 {
 	"name": "@paybyrd/card-collect",
-	"version": "1.0.0",
+	"version": "1.0.0-rc.0",
 	"description": "Paybyrd's tool to aid in the creation of credit card info collect forms",
-	"main": "index.js",
-	"license": "MIT",
+	"main": "dist/cardCollect.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/paybyrd/card-collect-js.git"
+	},
 	"scripts": {
 		"dev": "env-cmd -e development webpack serve --mode development",
 		"build": "cross-env NODE_ENV=production env-cmd -e production webpack --mode production",
 		"stage": "cross-env NODE_ENV=production env-cmd -e stage webpack --mode production"
 	},
+	"keywords": [
+		"card",
+		"collect",
+		"security",
+		"paybyrd"
+	  ],
+	  "author": "tiago.resende@paybyrd.com",
+	  "license": "MIT",
+	  "bugs": {
+		"url": "https://github.com/paybyrd/threedsecure-service-js/issues"
+	  },
+	  "homepage": "https://github.com/paybyrd/threedsecure-service-js#readme",
 	"dependencies": {
 		"@vgs/collect-js": "^0.6.1"
 	},
