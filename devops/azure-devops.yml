@@ -1,0 +1,58 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+trigger:
+  tags:
+    include:
+      - '*'
+  branches:
+    include:
+      - release/*
+      - hotfix/*
+
+pr:
+  branches:
+    include:
+      - master
+      - main
+
+pool:
+  name: 'Self-hosted'
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: Gateway/paybyrd-deployment
+      ref: refs/tags/1.13.1
+
+variables:
+  version_major: 1
+  version_minor: 0
+  version_patch: 0
+ 
+stages:
+- template: stages/prepare.yml@templates
+- stage: build
+  jobs:
+  - job: build
+    steps:
+    - bash: |
+        sed -i "s/\"version\": \"1.0.0\",/\"version\": \"$VERSION\",/" package.json
+      env:
+        VERSION: $(Build.BuildNumber)
+      name: updateVersion
+    - task: Npm@1
+      name: npmInstall
+      inputs:
+        command: 'install'
+        workingDir: '.'
+    - task: Npm@1
+      name: npmPublish
+      inputs:
+        command: 'publish'
+        workingDir: '.'
+        publishRegistry: useExternalRegistry
+        publishEndpoint: 'paybyrd-npm'
+      

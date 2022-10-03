@@ -1,0 +1,24 @@
+{
+	"env": {
+		"browser": true
+	},
+	"extends": [
+		"eslint:recommended"
+	],
+	"parserOptions": {
+		"ecmaVersion": 2021,
+		"sourceType": "module"
+	},
+	"ignorePatterns": [
+		"**/dist/*.js"
+	],
+	"rules": {
+		"prop-types": 0,
+		"no-undef": 0,
+		"react/prop-types": 0,
+		"no-extra-boolean-cast": 0,
+		"no-unsafe-optional-chaining": 0,
+		"no-unescaped-entities": 0,
+		"react/display-name": 0
+	}
+}
