@@ -44,9 +44,14 @@ stages:
       inputs:
         filepath: '.npmrc'
         filecontent: |
-          @paybyrd:registry=https://registry.npmjs.org/paybyrd
-          //registry.npmjs.org/paybyrd/:_authToken=$(NPM_TOKEN)
+          @paybyrd:registry=https://registry.npmjs.org/
+          //registry.npmjs.org/:_authToken=$(NPM_TOKEN)
         fileoverwrite: true
+    - bash: |
+        sed -i "s/\"version\": \"1.0.0\",/\"version\": \"$VERSION\",/" package.json
+      env:
+        VERSION: $(Build.BuildNumber)
+      name: UpdateVersion
     - bash: |
         npm install
       name: Install
@@ -54,7 +59,7 @@ stages:
         npm run build
       name: Build
     - bash: |
-        npm publish --public --tag $VERSION
+        npm publish --public
       name: Publish
       env:
         VERSION: $(Build.Number)
