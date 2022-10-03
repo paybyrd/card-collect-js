@@ -39,13 +39,20 @@ stages:
   jobs:
   - job: BuildJob
     steps:
-    - task: file-creator@6
-      name: CreateFile
+    - task: replacetokens@5
+      name: deploy_replace_tokens
       inputs:
-        filepath: '.npmrc'
-        filecontent: |
-          //registry.npmjs.org/:_authToken=$(NPM_TOKEN)
-        fileoverwrite: true
+        rootDirectory: '.'
+        targetFiles: '.npmrc'
+        encoding: 'auto'
+        tokenPattern: 'default'
+        writeBOM: true
+        actionOnMissing: fail
+        keepToken: false
+        actionOnNoFiles: fail
+        enableTransforms: false
+        useLegacyPattern: false
+        enableTelemetry: true
     - bash: |
         sed -i "s/\"version\": \"1.0.0\",/\"version\": \"$VERSION\",/" package.json
       env:
