@@ -93,7 +93,69 @@ export default () => {
 	);
 };
 ```
-JS (use dist/cardCollect.js)
+## Vue.js (using the build output cardCollect.js)
+
+```html
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<script src="cardCollect.js" type="text/javascript"></script>
+</head>
+
+<body>
+	<div id="app"></div>
+</body>
+```
+
+```js
+<script>
+export default {
+	mounted() {
+		const setup = async () => {
+			const cardCollect = await window.CardCollect.cardCollect();
+
+			cardCollect.cardCollect_holder({
+				id: '#cc-holder',
+				placeholder: 'Card holder',
+			});
+
+			cardCollect.cardCollect_card_number({
+				id: '#cc-number',
+				placeholder: 'Card number',
+			});
+
+			cardCollect.cardCollect_expiration_date({
+				id: '#cc-expiration-date',
+				placeholder: 'MM/YY',
+			});
+
+			cardCollect.cardCollect_cvv({
+				id: '#cc-cvc',
+				placeholder: 'CVV',
+			});
+		}
+
+		setup();
+	}
+}
+</script>
+<template>
+	<div id="app">
+		<div id="cardCollect">
+			<div id="cc-holder" class="form-field"></div>
+			<div id="cc-number" class="form-field"></div>
+			<div class="form-field-group">
+				<div id="cc-expiration-date" class="form-field"></div>
+				<div id="cc-cvc" class="form-field"></div>
+			</div>
+			<button class="form-button" id="submit-form">Submit</button>
+		</div>
+	</div>
+</template>
+```
+
+## JS (clone the project build it and use dist/cardCollect.js)
 
 ```html
 <body>
