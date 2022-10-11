@@ -93,7 +93,7 @@ export default () => {
 	);
 };
 ```
-## Vue.js (using the build output cardCollect.js)
+## Vue.js (using dist/cardCollect.js)
 
 ```html
 <head>
@@ -155,7 +155,7 @@ export default {
 </template>
 ```
 
-## JS (clone the project build it and use dist/cardCollect.js)
+## JS (using dist/cardCollect.js)
 
 ```html
 <body>
