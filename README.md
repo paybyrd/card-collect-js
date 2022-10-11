@@ -18,6 +18,17 @@ import CardCollect from "@paybyrd/card-collect";
 ```
 on your project.
 
+For web usage or usage in a vue.js project please download
+
+```
+dist/cardCollect.js
+```
+and add it to your html page
+
+```html
+<script src="cardCollect.js" type="text/javascript"></script>
+```
+
 # Usage
 
 ## React.js
