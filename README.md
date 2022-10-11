@@ -93,7 +93,7 @@ export default () => {
 	);
 };
 ```
-JS
+JS (use dist/cardCollect.js)
 
 ```html
 <body>
