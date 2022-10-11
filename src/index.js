@@ -4,6 +4,10 @@ import "./css/default.css";
 
 let hasInit = false;
 
+export function Test() {
+	console.log("Text");
+}
+
 export default async function cardCollect({ onStateChanged = null } = {}) {
 	let form = null;
 	let error = null;
@@ -153,3 +157,5 @@ export default async function cardCollect({ onStateChanged = null } = {}) {
 		cardCollect_error: error,
 	};
 }
+
+export { cardCollect };
