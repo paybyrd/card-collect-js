@@ -7,14 +7,14 @@ const isDev = process.env.NODE_ENV !== 'production';
 
 module.exports = (env) => {
 	return {
+		target: 'web',
 		devtool: isDev ? 'eval-source-map' : false,
 		output: {
 			path: path.join(__dirname, '/dist'),
-			library: {
-				name: "CardCollect",
-				type: "var",
-				export: "default",
-			},
+			library: "CardCollect",
+			libraryTarget: 'umd',
+			globalObject: 'this',
+			umdNamedDefine: true,
 			filename: 'cardCollect.js',
 		},
 		devServer: {
