@@ -18,17 +18,6 @@ import CardCollect from "@paybyrd/card-collect";
 ```
 on your project.
 
-For web usage or usage in a vue.js project please download
-
-```
-dist/cardCollect.js
-```
-and add it to your html page
-
-```html
-<script src="cardCollect.js" type="text/javascript"></script>
-```
-
 # Usage
 
 ## React.js
@@ -104,27 +93,15 @@ export default () => {
 	);
 };
 ```
-## Vue.js (using dist/cardCollect.js)
-
-```html
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-	<script src="cardCollect.js" type="text/javascript"></script>
-</head>
-
-<body>
-	<div id="app"></div>
-</body>
-```
+## Vue.js
 
 ```js
 <script>
+import CardCollect from "@paybyrd/card-collect";
 export default {
 	mounted() {
 		const setup = async () => {
-			const cardCollect = await window.CardCollect.cardCollect();
+			const cardCollect = await CardCollect();
 
 			cardCollect.cardCollect_holder({
 				id: '#cc-holder',
@@ -164,85 +141,4 @@ export default {
 		</div>
 	</div>
 </template>
-```
-
-## JS (using dist/cardCollect.js)
-
-```html
-<body>
-	<div id="cardCollect">
-		<div id="cc-holder" class="myfield"></div>
-		<div id="cc-number" class="form-field"></div>
-		<div class="form-field-group">
-			<div id="cc-expiration-date" class="form-field"></div>
-			<div id="cc-cvc" class="form-field"></div>
-		</div><button class="form-button" id="submit-form">Submit</button>
-	</div>
-	<script src="cardCollect.js"></script>
-	<script>
-		async function init() {
-			// Handler setup
-			const handleSubmit = () => {
-				cardCollect_submit()
-					.then(({ status, data }) => console.log("Success:", status, data)) // Handle paybyrd's response here
-					.catch((error) => console.log("Error:", error)); // Handle any errors here
-			};
-
-			const handleStateChanged = (state) => {
-				let valid = true;
-				for (const field in state) {
-					if (!state[field].isValid) {
-						valid = false;
-						break;
-					}
-				}
-
-				if (valid) {
-					const submit = document.getElementById("submit-form");
-					submit.disabled = false;
-				}
-			};
-
-			// Paybyrd card collect initialization
-			const {
-				cardCollect_field,
-				cardCollect_error,
-				cardCollect_submit,
-				cardCollect_card_number,
-				cardCollect_expiration_date,
-				cardCollect_cvv,
-				cardCollect_holder
-			} = await window.CardCollect.cardCollect();
-
-			// Form setup
-			const submitButton = document.getElementById("submit-form");
-			submitButton.onclick = handleSubmit;
-
-			if (!cardCollect_error) {
-				cardCollect_holder({
-					id: '#cc-holder',
-					placeholder: 'Card holder',
-				});
-
-				cardCollect_card_number({
-					id: '#cc-number',
-					placeholder: 'Card number',
-				});
-
-				cardCollect_expiration_date({
-					id: '#cc-expiration-date',
-					placeholder: 'MM/YY',
-				});
-
-				cardCollect_cvv({
-					id: '#cc-cvc',
-					placeholder: 'CVV',
-				});
-			}
-		}
-
-		init();
-	</script>
-</body>
-
 ```
