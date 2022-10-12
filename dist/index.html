@@ -7,7 +7,7 @@
 			border-radius: 7px;
 			box-shadow: 0 0 3px 0px rgba(0, 0, 0, .3);
 			padding: 0 10px;
-		}</style><script defer="defer" src="cardCollect.js"></script></head><body><div id="cardCollect"><div id="cc-holder" class="myfield"></div><div id="cc-number" class="form-field"></div><div class="form-field-group"><div id="cc-expiration-date" class="form-field"></div><div id="cc-cvc" class="form-field"></div></div><button class="form-button" id="submit-form">Submit</button></div><script src="cardCollect.js"></script><script>async function init() {
+		}</style><script defer="defer" src="cardCollect-web.js"></script></head><body><div id="cardCollect"><div id="cc-holder" class="myfield"></div><div id="cc-number" class="form-field"></div><div class="form-field-group"><div id="cc-expiration-date" class="form-field"></div><div id="cc-cvc" class="form-field"></div></div><button class="form-button" id="submit-form">Submit</button></div><script src="cardCollect-web.js"></script><script>async function init() {
 			// Handler setup
 			const handleSubmit = () => {
 				cardCollect_submit()
@@ -39,7 +39,7 @@
 				cardCollect_expiration_date,
 				cardCollect_cvv,
 				cardCollect_holder
-			} = await CardCollect();
+			} = await cardCollect();
 
 			// Form setup
 			const submitButton = document.getElementById("submit-form");

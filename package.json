@@ -9,7 +9,9 @@
 	},
 	"scripts": {
 		"dev": "env-cmd -e development webpack serve --mode development",
-		"build": "cross-env NODE_ENV=production env-cmd -e production webpack --mode production",
+		"build": "yarn run build:web & yarn run build:frameworks",
+		"build:frameworks": "cross-env NODE_ENV=production env-cmd -e production webpack --config webpack.config.web.js --mode production",
+		"build:web": "cross-env NODE_ENV=production env-cmd -e production webpack --config webpack.config.web.js --mode production",
 		"stage": "cross-env NODE_ENV=production env-cmd -e stage webpack --mode production",
 		"prepublishOnly": "cross-env NODE_ENV=production env-cmd -e production webpack --mode production"
 	},

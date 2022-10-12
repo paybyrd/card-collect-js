@@ -142,3 +142,86 @@ export default {
 	</div>
 </template>
 ```
+
+## JS
+
+Please use dist/cardCollect-web.js and include it in your html file
+
+```html
+<body>
+	<div id="cardCollect">
+		<div id="cc-holder" class="myfield"></div>
+		<div id="cc-number" class="form-field"></div>
+		<div class="form-field-group">
+			<div id="cc-expiration-date" class="form-field"></div>
+			<div id="cc-cvc" class="form-field"></div>
+		</div>
+		<button class="form-button" id="submit-form">Submit</button>
+	</div>
+	<script src="cardCollect-web.js"></script>
+	<script>
+		async function init() {
+			// Handler setup
+			const handleSubmit = () => {
+				cardCollect_submit()
+					.then(({ status, data }) => console.log("Success:", status, data)) // Handle paybyrd's response here
+					.catch((error) => console.log("Error:", error)); // Handle any errors here
+			};
+
+			const handleStateChanged = (state) => {
+				let valid = true;
+				for (const field in state) {
+					if (!state[field].isValid) {
+						valid = false;
+						break;
+					}
+				}
+
+				if (valid) {
+					const submit = document.getElementById("submit-form");
+					submit.disabled = false;
+				}
+			};
+
+			// Paybyrd card collect initialization
+			const {
+				cardCollect_field,
+				cardCollect_error,
+				cardCollect_submit,
+				cardCollect_card_number,
+				cardCollect_expiration_date,
+				cardCollect_cvv,
+				cardCollect_holder
+			} = await cardCollect();
+
+			// Form setup
+			const submitButton = document.getElementById("submit-form");
+			submitButton.onclick = handleSubmit;
+
+			if (!cardCollect_error) {
+				cardCollect_holder({
+					id: '#cc-holder',
+					placeholder: 'Card holder',
+				});
+
+				cardCollect_card_number({
+					id: '#cc-number',
+					placeholder: 'Card number',
+				});
+
+				cardCollect_expiration_date({
+					id: '#cc-expiration-date',
+					placeholder: 'MM/YY',
+				});
+
+				cardCollect_cvv({
+					id: '#cc-cvc',
+					placeholder: 'CVV',
+				});
+			}
+		}
+
+		init();
+	</script>
+</body>
+```

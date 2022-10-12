@@ -29,7 +29,7 @@
 		</div>
 		<button class="form-button" id="submit-form">Submit</button>
 	</div>
-	<script src="cardCollect.js"></script>
+	<script src="cardCollect-web.js"></script>
 	<script>
 		async function init() {
 			// Handler setup
@@ -63,7 +63,7 @@
 				cardCollect_expiration_date,
 				cardCollect_cvv,
 				cardCollect_holder
-			} = await CardCollect();
+			} = await cardCollect();
 
 			// Form setup
 			const submitButton = document.getElementById("submit-form");
