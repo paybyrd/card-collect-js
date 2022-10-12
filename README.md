@@ -95,7 +95,7 @@ export default () => {
 ```
 ## Vue.js
 
-```js
+```html
 <script>
 import CardCollect from "@paybyrd/card-collect";
 export default {
