@@ -9,12 +9,18 @@ module.exports = (env) => {
 	return {
 		target: 'web',
 		devtool: isDev ? 'eval-source-map' : false,
+		experiments: {
+			outputModule: true,
+		},
 		output: {
 			path: path.join(__dirname, '/dist'),
-			library: "CardCollect",
-			libraryTarget: 'umd',
-			globalObject: 'this',
-			umdNamedDefine: true,
+			library: {
+				type: "module"
+			},
+			//library: "CardCollect",
+			//libraryTarget: 'umd',
+			//globalObject: 'this',
+			//umdNamedDefine: true,
 			filename: 'cardCollect.js',
 		},
 		devServer: {
