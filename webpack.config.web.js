@@ -14,8 +14,14 @@ module.exports = (env) => {
 		},
 		output: {
 			path: path.join(__dirname, '/dist'),
-			libraryTarget: 'window',
+			publicPath: "",
+			library: {
+				name: "cardCollect",
+				type: "var",
+				export: "default",
+			},
 			filename: 'cardCollect-web.js',
+			scriptType: 'text/javascript'
 		},
 		devServer: {
 			port: 3000,

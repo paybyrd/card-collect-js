@@ -8,9 +8,9 @@
 		"url": "git+https://github.com/paybyrd/card-collect-js.git"
 	},
 	"scripts": {
-		"dev": "env-cmd -e development webpack serve --mode development",
+		"dev": "env-cmd -e development webpack serve --config ./webpack.config.web.js --mode development",
 		"build": "yarn run build:web & yarn run build:frameworks",
-		"build:frameworks": "cross-env NODE_ENV=production env-cmd -e production webpack --config webpack.config.web.js --mode production",
+		"build:frameworks": "cross-env NODE_ENV=production env-cmd -e production webpack --mode production",
 		"build:web": "cross-env NODE_ENV=production env-cmd -e production webpack --config webpack.config.web.js --mode production",
 		"stage": "cross-env NODE_ENV=production env-cmd -e stage webpack --mode production",
 		"prepublishOnly": "cross-env NODE_ENV=production env-cmd -e production webpack --mode production"
@@ -27,9 +27,7 @@
 		"url": "https://github.com/paybyrd/card-collect-js/issues"
 	},
 	"homepage": "https://github.com/paybyrd/card-collect-js#readme",
-	"dependencies": {
-		"@vgs/collect-js": "^0.6.1"
-	},
+	"dependencies": {},
 	"devDependencies": {
 		"@babel/core": "^7.18.10",
 		"@babel/preset-env": "^7.18.10",
