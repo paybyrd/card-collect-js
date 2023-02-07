@@ -217,7 +217,7 @@ export type VGSProperties = {
   /**
    * Control the length of the year we send to the server. If none is specified by default we accept both formats.
    */
-  yearLength: 2 | 4;
+  yearLength?: 2 | 4;
 };
 
 type VGSEnterPressData = {

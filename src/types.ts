@@ -4,7 +4,7 @@ export type FieldOptions = { id: string } & VGSProperties;
 
 export type CardCollectResponse = {
   status: number;
-  data: { tokenId: string; offerKey: string };
+  data: { tokenId: string; correlationId: string };
 };
 
 export type CardCollectOptions = {
