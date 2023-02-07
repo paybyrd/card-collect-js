@@ -1,48 +1,48 @@
 {
-	"name": "@paybyrd/card-collect",
-	"version": "1.0.0",
-	"description": "Paybyrd's tool to aid in the creation of credit card info collect forms",
-	"main": "dist/cardCollect.js",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/paybyrd/card-collect-js.git"
-	},
-	"scripts": {
-		"dev": "env-cmd -e development webpack serve --mode development",
-		"build": "yarn run build:web & yarn run build:frameworks",
-		"build:frameworks": "cross-env NODE_ENV=production env-cmd -e production webpack --config webpack.config.web.js --mode production",
-		"build:web": "cross-env NODE_ENV=production env-cmd -e production webpack --config webpack.config.web.js --mode production",
-		"stage": "cross-env NODE_ENV=production env-cmd -e stage webpack --mode production",
-		"prepublishOnly": "cross-env NODE_ENV=production env-cmd -e production webpack --mode production"
-	},
-	"keywords": [
-		"card",
-		"collect",
-		"security",
-		"paybyrd"
-	],
-	"author": "tiago.resende@paybyrd.com",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/paybyrd/card-collect-js/issues"
-	},
-	"homepage": "https://github.com/paybyrd/card-collect-js#readme",
-	"dependencies": {
-		"@vgs/collect-js": "^0.6.1"
-	},
-	"devDependencies": {
-		"@babel/core": "^7.18.10",
-		"@babel/preset-env": "^7.18.10",
-		"babel-loader": "^8.2.5",
-		"cross-env": "^7.0.3",
-		"css-loader": "^6.7.1",
-		"env-cmd": "^10.1.0",
-		"eslint": "^8.21.0",
-		"eslint-webpack-plugin": "^3.2.0",
-		"html-webpack-plugin": "^5.5.0",
-		"style-loader": "^3.3.1",
-		"webpack": "^5.74.0",
-		"webpack-cli": "^4.10.0",
-		"webpack-dev-server": "^4.9.3"
-	}
+  "name": "@paybyrd/card-collect",
+  "version": "1.0.0",
+  "description": "Paybyrd's tool to aid in the creation of credit card info collect forms",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paybyrd/card-collect-js.git"
+  },
+  "source": "src/index.ts",
+  "exports": {
+    "require": "./dist/index.cjs",
+    "default": "./dist/index.modern.js"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.module.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/index.umd.js",
+  "scripts": {
+    "build": "microbundle --define VGS_CNAME='token.paybyrd.com',VGS_VAULTID='tntsz1j9tj1',VGS_ENV='live-eu-1'",
+    "start": "microbundle watch --define VGS_CNAME='tokensandbox.paybyrd.com',VGS_VAULTID='tnt3uowyamd',VGS_ENV='sandbox'",
+    "dev": "microbundle --define VGS_CNAME='tokensandbox.paybyrd.com',VGS_VAULTID='tnt3uowyamd',VGS_ENV='sandbox'",
+    "stage": "microbundle --define VGS_CNAME='tokensandbox.paybyrd.com',VGS_VAULTID='tnt3uowyamd',VGS_ENV='sandbox'"
+  },
+  "keywords": [
+    "card",
+    "collect",
+    "security",
+    "paybyrd"
+  ],
+  "files": [
+    "dist",
+    "src"
+  ],
+  "author": "tiago.resende@paybyrd.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paybyrd/card-collect-js/issues"
+  },
+  "homepage": "https://github.com/paybyrd/card-collect-js#readme",
+  "dependencies": {
+    "@vgs/collect-js": "^0.6.1"
+  },
+  "devDependencies": {
+    "microbundle": "^0.15.1",
+    "typescript": "^4.9.5"
+  }
 }

@@ -1,76 +1,120 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paybyrd card collect</title>
+    <style>
+      .myfield {
+        width: 100%;
+        height: 60px;
+        position: relative;
+        background: purple;
+        margin-bottom: 10px;
+        border-radius: 7px;
+        box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.3);
+        padding: 0 10px;
+      }
+      .form-field {
+        width: 100%;
+        height: 40px;
+        position: relative;
+        background: white;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.3);
+        padding: 0 10px;
+      }
 
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Paybyrd card collect</title>
-	<style>
-		.myfield {
-			width: 100%;
-			height: 60px;
-			position: relative;
-			background: purple;
-			margin-bottom: 10px;
-			border-radius: 7px;
-			box-shadow: 0 0 3px 0px rgba(0, 0, 0, .3);
-			padding: 0 10px;
-		}
-	</style>
-</head>
+      iframe {
+        width: 100%;
+        height: 100%;
+      }
 
-<body>
-	<div id="cardCollect">
-		<div id="cc-holder" class="myfield"></div>
-		<div id="cc-number" class="form-field"></div>
-		<div class="form-field-group">
-			<div id="cc-expiration-date" class="form-field"></div>
-			<div id="cc-cvc" class="form-field"></div>
-		</div>
-		<button class="form-button" id="submit-form">Submit</button>
-	</div>
-	<script src="cardCollect-web.js"></script>
-	<script>
-		async function init() {
-			// Handler setup
-			const handleSubmit = () => {
-				cardCollect_submit()
-					.then(({ status, data }) => console.log("Success:", status, data)) // Handle paybyrd's response here
-					.catch((error) => console.log("Error:", error)); // Handle any errors here
-			};
+      .form-field-group {
+        display: flex;
+        flex-flow: wrap;
+      }
 
-			const handleStateChanged = (state) => {
-				let valid = true;
-				for (const field in state) {
-					if (!state[field].isValid) {
-						valid = false;
-						break;
-					}
-				}
+      .form-field-group div {
+        flex: 0 0 50%;
+        box-sizing: border-box;
+      }
 
-				if (valid) {
-					const submit = document.getElementById("submit-form");
-					submit.disabled = false;
-				}
-			};
+      .form-field-group div:first-child {
+        border-radius: 4px 0 0 4px;
+      }
 
-			// Paybyrd card collect initialization
-			const {
-				cardCollect_field,
-				cardCollect_error,
-				cardCollect_submit,
-				cardCollect_card_number,
-				cardCollect_expiration_date,
-				cardCollect_cvv,
-				cardCollect_holder
-			} = await cardCollect();
+      .form-field-group div:last-child {
+        border-radius: 0 4px 4px 0;
+      }
 
-			// Form setup
-			const submitButton = document.getElementById("submit-form");
-			submitButton.onclick = handleSubmit;
+      .form-button {
+        border: 1px solid #1f8ab0;
+        background-color: #3b495c;
+        border-color: #3b495c;
+        color: #ced5e0;
+        font-family: inherit;
+        border-radius: 4px;
+        font-size: 16px;
+        height: 35px;
+        width: 100%;
+      }
+    </style>
+  </head>
 
-			if (!cardCollect_error) {
-				/*cardCollect_field({
+  <body>
+    <div id="cardCollect">
+      <div id="cc-holder" class="myfield"></div>
+      <div id="cc-number" class="form-field"></div>
+      <div class="form-field-group">
+        <div id="cc-expiration-date" class="form-field"></div>
+        <div id="cc-cvc" class="form-field"></div>
+      </div>
+      <button class="form-button" id="submit-form">Submit</button>
+    </div>
+    <script src="cardCollect-web.js"></script>
+    <script>
+      async function init() {
+        // Handler setup
+        const handleSubmit = () => {
+          cardCollect_submit()
+            .then(({ status, data }) => console.log("Success:", status, data)) // Handle paybyrd's response here
+            .catch((error) => console.log("Error:", error)); // Handle any errors here
+        };
+
+        const handleStateChanged = (state) => {
+          let valid = true;
+          for (const field in state) {
+            if (!state[field].isValid) {
+              valid = false;
+              break;
+            }
+          }
+
+          if (valid) {
+            const submit = document.getElementById("submit-form");
+            submit.disabled = false;
+          }
+        };
+
+        // Paybyrd card collect initialization
+        const {
+          cardCollect_field,
+          cardCollect_error,
+          cardCollect_submit,
+          cardCollect_card_number,
+          cardCollect_expiration_date,
+          cardCollect_cvv,
+          cardCollect_holder,
+        } = await cardCollect();
+
+        // Form setup
+        const submitButton = document.getElementById("submit-form");
+        submitButton.onclick = handleSubmit;
+
+        if (!cardCollect_error) {
+          /*cardCollect_field({
 					id: '#cc-holder',
 					type: 'text',
 					name: 'card_holder',
@@ -101,30 +145,29 @@
 					validations: ['required', 'validCardSecurityCode'],
 				});*/
 
-				cardCollect_holder({
-					id: '#cc-holder',
-					placeholder: 'Card holder',
-				});
+          cardCollect_holder({
+            id: "#cc-holder",
+            placeholder: "Card holder",
+          });
 
-				cardCollect_card_number({
-					id: '#cc-number',
-					placeholder: 'Card number',
-				});
+          cardCollect_card_number({
+            id: "#cc-number",
+            placeholder: "Card number",
+          });
 
-				cardCollect_expiration_date({
-					id: '#cc-expiration-date',
-					placeholder: 'MM/YY',
-				});
+          cardCollect_expiration_date({
+            id: "#cc-expiration-date",
+            placeholder: "MM/YY",
+          });
 
-				cardCollect_cvv({
-					id: '#cc-cvc',
-					placeholder: 'CVV',
-				});
-			}
-		}
+          cardCollect_cvv({
+            id: "#cc-cvc",
+            placeholder: "CVV",
+          });
+        }
+      }
 
-		init();
-	</script>
-</body>
-
+      init();
+    </script>
+  </body>
 </html>
