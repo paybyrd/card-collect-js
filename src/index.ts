@@ -9,7 +9,7 @@ const VGS_CODE_KEY = "_cgnsT7sJuepFWXSIqgPSBT3WObz22FP5A4g3mNJ9Ny7AzFuZG4R3w==";
 
 function noop() {}
 
-export default async function cardCollect({
+export default async function CardCollect({
   onStateChanged,
 }: CardCollectOptions = {}) {
   const collect = (await loadVGSCollect({
@@ -156,6 +156,6 @@ export default async function cardCollect({
   };
 }
 
-export { cardCollect };
+export { CardCollect as cardCollect };
 
 export type { FieldOptions, CardCollectResponse, CardCollectOptions };
