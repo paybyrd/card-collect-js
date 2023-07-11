@@ -17,6 +17,7 @@ export type GenerateFieldProps = {
 	type?: string;
 	wrapper: HTMLElement;
 	maxLength?: number;
+	id: string;
 	validationType?: string;
 	customHandleChange?: (value: string) => void;
 	inputAddornment?: string;

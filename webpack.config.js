@@ -14,11 +14,12 @@ module.exports = () => {
 			outputModule: true
 		},
 		output: {
-			path: path.join(__dirname, '/dist'),
+			publicPath: '',
 			library: {
-				type: 'module'
-			},
-			filename: 'cardCollect.js'
+				name: 'cardCollect',
+				type: 'var',
+				export: 'default'
+			}
 		},
 		devServer: {
 			port: 3000,

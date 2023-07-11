@@ -11,7 +11,7 @@
 		"url": "git+https://github.com/paybyrd/card-collect-js.git"
 	},
 	"scripts": {
-		"dev": "env-cmd -e development webpack serve --config ./webpack.config.web.js --mode development",
+		"dev": "env-cmd -e development webpack serve --config ./webpack.config.js --open --mode development",
 		"build": "yarn run build:web & yarn run build:frameworks",
 		"build:frameworks": "cross-env NODE_ENV=production env-cmd -e production webpack --mode production",
 		"build:web": "cross-env NODE_ENV=production env-cmd -e production webpack --config webpack.config.web.js --mode production",

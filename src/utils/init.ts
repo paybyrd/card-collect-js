@@ -53,12 +53,16 @@ const handleKeyUp = (
 export const generateField = ({
 	type = 'text',
 	wrapper,
+	id,
 	maxLength,
 	validationType,
 	customHandleChange,
 	inputAddornment
 }: GenerateFieldProps) => {
+	if (document.getElementById(id)) return;
+
 	const fieldInput = document.createElement('input');
+	fieldInput.id = id;
 	fieldInput.type = type;
 	fieldInput.placeholder = wrapper.getAttribute('data-placeholder') || '';
 	fieldInput.addEventListener('keyup', (event) =>

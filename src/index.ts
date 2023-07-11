@@ -19,13 +19,14 @@ export default async ({ displayErrors }: CardCollectProps = {}): Promise<CardCol
 
 	// Generate fields in DOM
 	if (cHolder) {
-		generateField({ wrapper: cHolder });
+		generateField({ wrapper: cHolder, id: 'pb-cc-holder' });
 	}
 	if (cNumber) {
 		generateField({
 			wrapper: cNumber,
 			maxLength: 22,
 			type: 'tel',
+			id: 'pb-cc-number',
 			validationType: 'cardNumber',
 			customHandleChange: (cardNumber: string) => {
 				const wrapper = cNumber && cNumber.querySelector('.form-field-addornment');
@@ -42,6 +43,7 @@ export default async ({ displayErrors }: CardCollectProps = {}): Promise<CardCol
 			wrapper: cExpDate,
 			maxLength: 5,
 			type: 'tel',
+			id: 'pb-cc-exp-date',
 			validationType: 'expirationDate',
 			inputAddornment: CreditCardPlaceholderExpDate
 		});
@@ -51,6 +53,7 @@ export default async ({ displayErrors }: CardCollectProps = {}): Promise<CardCol
 			wrapper: cCVV,
 			maxLength: 4,
 			type: 'tel',
+			id: 'pb-cc-cvv',
 			validationType: 'cvv',
 			inputAddornment: CreditCardPlaceholderCVV
 		});
