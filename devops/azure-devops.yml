@@ -25,7 +25,8 @@ resources:
     - repository: templates
       type: git
       name: Gateway/paybyrd-deployment
-      ref: refs/tags/3.3.1
+      #ref: refs/tags/3.3.1
+      ref: release/3.3.2
 
 variables:
   - template: variables.yml
