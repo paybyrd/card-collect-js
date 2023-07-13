@@ -5,23 +5,21 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const isDev = process.env.NODE_ENV !== 'production';
 
-module.exports = (env) => {
+module.exports = () => {
 	return {
 		target: 'web',
 		devtool: isDev ? 'eval-source-map' : false,
+		mode: isDev ? 'development' : 'production',
 		experiments: {
-			outputModule: true,
+			outputModule: true
 		},
 		output: {
-			path: path.join(__dirname, '/dist'),
+			publicPath: '',
 			library: {
-				type: "module"
-			},
-			//library: "CardCollect",
-			//libraryTarget: 'umd',
-			//globalObject: 'this',
-			//umdNamedDefine: true,
-			filename: 'cardCollect.js',
+				name: 'cardCollect',
+				type: 'var',
+				export: 'default'
+			}
 		},
 		devServer: {
 			port: 3000,
@@ -37,25 +35,33 @@ module.exports = (env) => {
 					}
 				},
 				{
+					test: /\.tsx?$/,
+					use: ['babel-loader', 'ts-loader'],
+					exclude: /node_modules/
+				},
+				{
 					test: /\.css$/,
 					use: ['style-loader', 'css-loader']
+				},
+				{
+					test: /\.svg$/,
+					loader: 'svg-inline-loader'
 				}
 			]
 		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
 		plugins: [
 			new HtmlWebpackPlugin({
-				template: './public/index.html',
+				template: './public/index.html'
 			}),
 			new webpack.DefinePlugin({
-				VGS_CNAME: JSON.stringify(process.env.VGS_CNAME),
-				VGS_GATEWAY_CNAME: JSON.stringify(process.env.VGS_GATEWAY_CNAME),
-				VGS_VAULTID: JSON.stringify(process.env.VGS_VAULTID),
-				VGS_ENV: JSON.stringify(process.env.VGS_ENV),
-				VGS_CODE_KEY: JSON.stringify(process.env.VGS_CODE_KEY),
-				PAYBYRD_API_URL: JSON.stringify(process.env.PAYBYRD_API_URL),
+				PAYBYRD_TOKEN_URL: JSON.stringify(process.env.PAYBYRD_TOKEN_URL),
+				PAYBYRD_CODE_KEY: JSON.stringify(process.env.PAYBYRD_CODE_KEY)
 			}),
 			new ESLintPlugin({
-				files: 'src/**/*.js'
+				files: 'src/**/*.ts'
 			})
 		]
 	};

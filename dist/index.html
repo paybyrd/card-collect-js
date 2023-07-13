@@ -1,102 +1,47 @@
-<!doctype html><html><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Paybyrd card collect</title><style>.myfield {
-			width: 100%;
-			height: 60px;
-			position: relative;
-			background: purple;
-			margin-bottom: 10px;
-			border-radius: 7px;
-			box-shadow: 0 0 3px 0px rgba(0, 0, 0, .3);
-			padding: 0 10px;
-		}</style><script defer="defer" src="cardCollect-web.js"></script></head><body><div id="cardCollect"><div id="cc-holder" class="myfield"></div><div id="cc-number" class="form-field"></div><div class="form-field-group"><div id="cc-expiration-date" class="form-field"></div><div id="cc-cvc" class="form-field"></div></div><button class="form-button" id="submit-form">Submit</button></div><script src="cardCollect-web.js"></script><script>async function init() {
-			// Handler setup
-			const handleSubmit = () => {
-				cardCollect_submit()
-					.then(({ status, data }) => console.log("Success:", status, data)) // Handle paybyrd's response here
-					.catch((error) => console.log("Error:", error)); // Handle any errors here
-			};
-
-			const handleStateChanged = (state) => {
-				let valid = true;
-				for (const field in state) {
-					if (!state[field].isValid) {
-						valid = false;
-						break;
-					}
-				}
-
-				if (valid) {
-					const submit = document.getElementById("submit-form");
-					submit.disabled = false;
-				}
-			};
-
-			// Paybyrd card collect initialization
-			const {
-				cardCollect_field,
-				cardCollect_error,
-				cardCollect_submit,
-				cardCollect_card_number,
-				cardCollect_expiration_date,
-				cardCollect_cvv,
-				cardCollect_holder
-			} = await cardCollect();
-
-			// Form setup
-			const submitButton = document.getElementById("submit-form");
-			submitButton.onclick = handleSubmit;
-
-			if (!cardCollect_error) {
-				/*cardCollect_field({
-					id: '#cc-holder',
-					type: 'text',
-					name: 'card_holder',
-					placeholder: 'Card holder',
-					validations: ['required'],
-				});
-				cardCollect_field({
-					id: '#cc-number',
-					type: 'card-number',
-					name: 'card_number',
-					placeholder: 'Card number',
-					validations: ['required', 'validCardNumber'],
-				});
-				cardCollect_field({
-					id: '#cc-expiration-date',
-					type: 'card-expiration-date',
-					name: 'card_exp',
-					placeholder: 'MM/YY',
-					validations: ['required', 'validCardExpirationDate'],
-					serializers: [{ name: 'replace', options: { old: ' ', new: '' } }],
-					yearLength: 2,
-				});
-				cardCollect_field({
-					id: '#cc-cvc',
-					type: 'card-security-code',
-					name: 'card_cvv',
-					placeholder: 'CVV',
-					validations: ['required', 'validCardSecurityCode'],
-				});*/
-
-				cardCollect_holder({
-					id: '#cc-holder',
-					placeholder: 'Card holder',
-				});
-
-				cardCollect_card_number({
-					id: '#cc-number',
-					placeholder: 'Card number',
-				});
-
-				cardCollect_expiration_date({
-					id: '#cc-expiration-date',
-					placeholder: 'MM/YY',
-				});
-
-				cardCollect_cvv({
-					id: '#cc-cvc',
-					placeholder: 'CVV',
-				});
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Paybyrd card collect</title>
+		<style>
+			div.myfield {
+				height: 60px;
 			}
-		}
+			div.myfield > input {
+				background: purple;
+			}
+		</style>
+		<script src="cardCollect-web.js"></script>
+	</head>
+	<body>
+		<div id="cardCollect">
+			<div id="cc-holder" class="form-field myfield" data-placeholder="Card Holder"></div>
+			<div id="cc-number" class="form-field" data-placeholder="Card Number"></div>
+			<div class="form-field-group">
+				<div id="cc-expiration-date" class="form-field" data-placeholder="MM/YY"></div>
+				<div id="cc-cvc" class="form-field" data-placeholder="CVV"></div>
+			</div>
+			<button class="form-button" id="submit-form">Submit</button>
+		</div>
+		<script>
+			async function init() {
+				const handleSubmit = () => {
+					cardCollect_submit()
+						// Handle paybyrd's response here
+						.then(({ status, data }) => console.log('Success:', status, data))
+						// Handle any errors here
+						.catch((error) => console.log('Error:', error));
+				};
 
-		init();</script></body></html>
+				// Paybyrd card collect initialization
+				const { cardCollect_submit } = await cardCollect({ displayErrors: true });
+
+				// Form setup
+				document.getElementById('submit-form').onclick = handleSubmit;
+			}
+
+			init();
+		</script>
+	</body>
+</html>

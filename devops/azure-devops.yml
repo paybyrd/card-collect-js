@@ -25,13 +25,13 @@ resources:
     - repository: templates
       type: git
       name: Gateway/paybyrd-deployment
-      ref: refs/tags/1.13.1
+      ref: refs/tags/3.3.2
 
 variables:
   - template: variables.yml
  
 stages:
-- template: stages/prepare.yml@templates
+- template: versioning/prepare.yml@templates
 - stage: BuildStage
   jobs:
   - job: BuildJob

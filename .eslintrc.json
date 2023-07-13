@@ -1,0 +1,23 @@
+{
+	"env": {
+		"browser": true
+	},
+	"extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+	"parser": "@typescript-eslint/parser",
+	"plugins": ["@typescript-eslint"],
+	"parserOptions": {
+		"ecmaVersion": 2021,
+		"sourceType": "module"
+	},
+	"ignorePatterns": ["**/dist/*.js", "node_modules/*"],
+	"rules": {
+		"prop-types": 0,
+		"no-undef": 0,
+		"react/prop-types": 0,
+		"no-extra-boolean-cast": 0,
+		"no-unsafe-optional-chaining": 0,
+		"no-unescaped-entities": 0,
+		"react/display-name": 0,
+		"@typescript-eslint/no-var-requires": 0
+	}
+}
