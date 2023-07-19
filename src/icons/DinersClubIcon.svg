@@ -1,6 +1,5 @@
 <svg viewBox="350 -30 40 530" style="width: 30px; height: 30px">
   <g id="diners">
-    <circle cx="375" cy="225" r="260" fill="#F5F5F5"></circle>
     <path
       id="Shape-path"
       fill="#0079BE"

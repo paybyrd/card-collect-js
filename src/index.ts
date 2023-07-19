@@ -1,7 +1,7 @@
 import { CardCollectProps, CardCollectResponse, SubmitBody } from './types/types';
 
 import { generateField } from './utils/init';
-import { validateFields, clearValidations } from './utils/validations';
+import { validateFields, clearValidations, generateError } from './utils/validations';
 import { getBrandByCardNumber } from './utils/utils';
 
 const CreditCardPlaceholder = require('./icons/CreditCardPlaceholder.svg') as string;
@@ -10,16 +10,50 @@ const CreditCardPlaceholderExpDate = require('./icons/CreditCardPlaceholderExpDa
 
 import './css/default.css';
 
-export default async ({ displayErrors }: CardCollectProps = {}): Promise<CardCollectResponse> => {
+export default async ({
+	displayErrors,
+	onFieldChange = () => {},
+	validateOnChange,
+	displayHelpIcons
+}: CardCollectProps = {}): Promise<CardCollectResponse> => {
 	const cHolder = document.getElementById('cc-holder');
 	const cNumber = document.getElementById('cc-number');
 	const cExpDate = document.getElementById('cc-expiration-date');
 	const cCVV = document.getElementById('cc-cvc');
 	const allFields = [cHolder, cNumber, cExpDate, cCVV];
+	let isDirty = false;
 
 	// Generate fields in DOM
 	if (cHolder) {
-		generateField({ wrapper: cHolder, id: 'pb-cc-holder' });
+		generateField({
+			wrapper: cHolder,
+			id: 'pb-cc-holder',
+			validationType: 'holderName',
+			customHandleChange: (holderName: string) => {
+				const { isValid, errors } = validateFields({
+					holderValue: holderName
+				});
+
+				onFieldChange({
+					fieldId: 'pb-cc-holder',
+					element: cHolder,
+					error: errors['cc-holder'],
+					isValid
+				});
+
+				if (validateOnChange || isDirty) {
+					clearValidations([cHolder]);
+
+					if (!isValid) {
+						generateError({
+							field: cHolder,
+							displayErrors,
+							errorData: errors['cc-holder']
+						});
+					}
+				}
+			}
+		});
 	}
 	if (cNumber) {
 		generateField({
@@ -34,6 +68,29 @@ export default async ({ displayErrors }: CardCollectProps = {}): Promise<CardCol
 				if (wrapper) {
 					wrapper.innerHTML = getBrandByCardNumber((cardNumber || '').replace(/ /g, ''));
 				}
+
+				const { isValid, errors } = validateFields({
+					cardValue: cardNumber
+				});
+
+				onFieldChange({
+					fieldId: 'pb-cc-number',
+					element: cNumber,
+					error: errors['cc-number'],
+					isValid
+				});
+
+				if (validateOnChange || isDirty) {
+					clearValidations([cNumber]);
+
+					if (!isValid) {
+						generateError({
+							field: cNumber,
+							displayErrors,
+							errorData: errors['cc-number']
+						});
+					}
+				}
 			},
 			inputAddornment: CreditCardPlaceholder
 		});
@@ -45,7 +102,31 @@ export default async ({ displayErrors }: CardCollectProps = {}): Promise<CardCol
 			type: 'tel',
 			id: 'pb-cc-exp-date',
 			validationType: 'expirationDate',
-			inputAddornment: CreditCardPlaceholderExpDate
+			customHandleChange: (expDate: string) => {
+				const { isValid, errors } = validateFields({
+					dateValue: expDate
+				});
+
+				onFieldChange({
+					fieldId: 'pb-cc-exp-date',
+					element: cExpDate,
+					error: errors['cc-expiration-date'],
+					isValid
+				});
+
+				if (validateOnChange || isDirty) {
+					clearValidations([cExpDate]);
+
+					if (!isValid) {
+						generateError({
+							field: cExpDate,
+							displayErrors,
+							errorData: errors['cc-expiration-date']
+						});
+					}
+				}
+			},
+			inputAddornment: displayHelpIcons ? CreditCardPlaceholderExpDate : undefined
 		});
 	}
 	if (cCVV) {
@@ -55,7 +136,31 @@ export default async ({ displayErrors }: CardCollectProps = {}): Promise<CardCol
 			type: 'tel',
 			id: 'pb-cc-cvv',
 			validationType: 'cvv',
-			inputAddornment: CreditCardPlaceholderCVV
+			customHandleChange: (cvv: string) => {
+				const { isValid, errors } = validateFields({
+					cvvValue: cvv
+				});
+
+				onFieldChange({
+					fieldId: 'pb-cc-cvv',
+					element: cCVV,
+					error: errors['cc-cvc'],
+					isValid
+				});
+
+				if (validateOnChange || isDirty) {
+					clearValidations([cCVV]);
+
+					if (!isValid) {
+						generateError({
+							field: cCVV,
+							displayErrors,
+							errorData: errors['cc-cvc']
+						});
+					}
+				}
+			},
+			inputAddornment: displayHelpIcons ? CreditCardPlaceholderCVV : undefined
 		});
 	}
 
@@ -92,20 +197,18 @@ export default async ({ displayErrors }: CardCollectProps = {}): Promise<CardCol
 		});
 
 		if (!isValid) {
+			isDirty = true;
+
 			Object.entries(errors).map((error) => {
 				const field = document.getElementById(error[0]);
-				const errorData = error[1]; // TODO Do we need to send back a message?
+				const errorData = error[1];
 
 				if (field) {
-					field.classList.add('form-error');
-
-					if (displayErrors) {
-						const wrapper = field.querySelector('.form-field-error');
-
-						if (wrapper) {
-							wrapper.innerHTML = errorData.message;
-						}
-					}
+					generateError({
+						field,
+						displayErrors,
+						errorData
+					});
 				}
 			});
 
