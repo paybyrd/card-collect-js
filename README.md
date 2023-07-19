@@ -22,6 +22,8 @@ and then
 
 ```js
 import CardCollect from '@paybyrd/card-collect';
+or;
+import CardCollect from '@paybyrd/card-collect/dist/cardCollect-web.js';
 ```
 
 on your project.
@@ -42,10 +44,18 @@ export default () => {
 			.catch((error) => console.log('Error:', error)); // Handle any errors here
 	};
 
+	const handleFieldChange = ({ fieldId, element, error, isValid }) => {
+		console.log(fieldId, element, error, isValid);
+	};
+
 	useEffect(() => {
 		const setup = async () => {
 			if (!cc) {
-				const cardCollect = await CardCollect({ displayErrors: true });
+				const cardCollect = await CardCollect({
+					displayErrors: true, // Optional. It will display error messages automatically without any extra configurations
+					onFieldChange: handleFieldChange, // Optional. It will retrieve an object with metadata to perform extra validations
+					validateOnChange: false // Optional. It will validate on change even before form submission
+				});
 				setCardCollect(cardCollect);
 			}
 		};
@@ -75,9 +85,26 @@ export default () => {
 <script>
 	import CardCollect from '@paybyrd/card-collect';
 	export default {
+		data: {
+			cardCollect: () => {},
+		}
+		methods: {
+			handleSubmit: () {
+				cardCollect.cardCollect_submit()
+					.then(({ status, data }) => console.log('Success:', status, data)) // Handle paybyrd's response here
+					.catch((error) => console.log('Error:', error)); // Handle any errors here
+			},
+			handleFieldChange: ({ fieldId, element, error, isValid }) {
+				console.log(fieldId, element, error, isValid);
+			}
+		},
 		mounted() {
 			const setup = async () => {
-				const cardCollect = await CardCollect();
+				this.cardCollect = await CardCollect({
+					displayErrors: true, // Optional. It will display error messages automatically without any extra configurations
+					onFieldChange: handleFieldChange, // Optional. It will retrieve an object with metadata to perform extra validations
+					validateOnChange: false, // Optional. It will validate on change even before form submission
+				});
 			};
 
 			setup();
@@ -116,7 +143,7 @@ Please use dist/cardCollect-web.js and include it in your html file
 	</div>
 
 	<script src="cardCollect-web.js"></script>
-	<script>
+	<script type="module">
 		async function init() {
 			// Handler setup
 			const handleSubmit = () => {
@@ -125,8 +152,16 @@ Please use dist/cardCollect-web.js and include it in your html file
 					.catch((error) => console.log('Error:', error)); // Handle any errors here
 			};
 
+			const handleFieldChange = ({ fieldId, element, error, isValid }) => {
+				console.log(fieldId, element, error, isValid);
+			};
+
 			// Paybyrd card collect initialization
-			const { cardCollect_submit } = await cardCollect();
+			const { cardCollect_submit } = await cardCollect({
+				displayErrors: true, // Optional. It will display error messages automatically without any extra configurations
+				onFieldChange: handleFieldChange, // Optional. It will retrieve an object with metadata to perform extra validations
+				validateOnChange: false // Optional. It will validate on change even before form submission
+			});
 
 			// Form setup
 			document.getElementById('submit-form').onclick = handleSubmit;

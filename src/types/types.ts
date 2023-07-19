@@ -1,5 +1,14 @@
+type FieldChangeProps = {
+	fieldId: string;
+	element: HTMLElement;
+	error: Record<string, string>;
+	isValid: boolean;
+};
+
 export type CardCollectProps = {
 	displayErrors?: boolean;
+	onFieldChange?: ({ fieldId, element, error, isValid }: FieldChangeProps) => void;
+	validateOnChange?: boolean;
 };
 
 export type SubmitBody = {
@@ -19,14 +28,14 @@ export type GenerateFieldProps = {
 	maxLength?: number;
 	id: string;
 	validationType?: string;
-	customHandleChange?: (value: string) => void;
+	customHandleChange: (value: string) => void;
 	inputAddornment?: string;
 };
 
 export type InputChangeProps = {
 	validationType?: string;
 	maxLength?: number;
-	customHandleChange?: (value: string) => void;
+	customHandleChange: (value: string) => void;
 };
 
 export type ValidateFieldsProps = {
@@ -39,4 +48,10 @@ export type ValidateFieldsProps = {
 export type ErrorData = {
 	type: string;
 	message: string;
+};
+
+export type GenerateErrorProps = {
+	field: HTMLElement;
+	displayErrors?: boolean;
+	errorData: Record<string, string>;
 };

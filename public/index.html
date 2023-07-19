@@ -27,8 +27,7 @@
 		<button class="form-button" id="submit-form">Submit</button>
 	</div>
 
-	<script src="cardCollect-web.js"></script>
-	<script>
+	<script type="module">
 		async function init() {
 			const handleSubmit = () => {
 				cardCollect_submit()
@@ -38,8 +37,16 @@
 					.catch((error) => console.log("Error:", error));
 			};
 
+			const handleFieldChange = ({ fieldId, element, error, isValid }) => {
+				console.log(fieldId, element, error, isValid);
+			}
+
 			// Paybyrd card collect initialization
-			const { cardCollect_submit } = await cardCollect({ displayErrors: true });
+			const { cardCollect_submit } = await cardCollect({
+				displayErrors: true,
+				onFieldChange: handleFieldChange,
+				validateOnChange: false,
+			});
 
 			// Form setup
 			document.getElementById("submit-form").onclick = handleSubmit;

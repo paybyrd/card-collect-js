@@ -15,12 +15,12 @@
     />
     <rect
       fill="none"
-      style="stroke: #eb4f3d; stroke-miterlimit: 10; strokeWidth: 2px"
-      x="10.11"
-      y="23.01"
-      width="6"
-      height="2"
+      style="stroke: #eb4f3d; stroke-miterlimit: 30; stroke-width: 3px;"
+      x="9.73"
+      y="21.01"
+      width="9"
+      height="6"
       rx="0.5"
-    />
+    ></rect>
   </g>
 </svg>

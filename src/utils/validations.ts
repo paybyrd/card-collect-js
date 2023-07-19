@@ -1,4 +1,4 @@
-import { ValidateFieldsProps, ErrorData } from '../types/types';
+import { ValidateFieldsProps, ErrorData, GenerateErrorProps } from '../types/types';
 import { validateCreditCard } from './cardValidation';
 
 export const regexOnlyNumbers = (value: string) => {
@@ -62,9 +62,21 @@ export const validateFields = ({
 };
 
 export const clearValidations = (fields: Array<HTMLElement | null>) => {
-	fields.map((field) => {
+	return fields.map((field) => {
 		if (!field) return;
 
 		field.classList.remove('form-error');
 	});
+};
+
+export const generateError = ({ field, displayErrors, errorData }: GenerateErrorProps) => {
+	field.classList.add('form-error');
+
+	if (displayErrors) {
+		const wrapper = field.querySelector('.form-field-error');
+
+		if (wrapper) {
+			wrapper.innerHTML = errorData.message;
+		}
+	}
 };

@@ -3,43 +3,62 @@ import { InputChangeProps, GenerateFieldProps } from '../types/types';
 import { regexOnlyNumbers } from './validations';
 
 const handleKeyUp = (
-	event: KeyboardEvent,
+	event: InputEvent,
 	{ validationType, maxLength, customHandleChange }: InputChangeProps
 ) => {
 	const target = event.target as HTMLInputElement;
 	let formattedValue = regexOnlyNumbers(target.value);
 
 	switch (validationType) {
+		case 'holderName': {
+			customHandleChange(target.value);
+			break;
+		}
 		case 'expirationDate': {
-			const month = formattedValue.substr(0, 2);
+			let month = formattedValue.substr(0, 2);
 			const year = formattedValue.substr(2, 2);
+
+			if (month && event.data && !isNaN(Number(event.data))) {
+				if (Number(event.data) < 10) {
+					formattedValue = `0${month}`;
+				}
+
+				const normalizedMonth = `${month.substring(1)}${event.data}`;
+				if (month.startsWith('0') && month.length === 2 && Number(normalizedMonth) <= 12) {
+					customHandleChange(normalizedMonth);
+					target.value = normalizedMonth;
+					return;
+				}
+			}
+
+			if (Number(month) > 12) {
+				month = '12';
+			}
 
 			if (year) {
 				formattedValue = `${month}/${year}`;
 			}
 
+			customHandleChange(formattedValue);
 			target.value = formattedValue;
 			break;
 		}
 		case 'cvv': {
 			target.value = formattedValue.substr(0, maxLength);
+			customHandleChange(formattedValue.substr(0, maxLength));
 			break;
 		}
 		case 'cardNumber': {
 			const splitNumbers = (formattedValue || '').match(/.{1,4}/g);
 
 			if (!splitNumbers) {
-				if (customHandleChange) {
-					customHandleChange(formattedValue.substr(0, maxLength));
-				}
+				customHandleChange(formattedValue.substr(0, maxLength));
 
 				target.value = formattedValue.substr(0, maxLength);
 				break;
 			}
 
-			if (customHandleChange) {
-				customHandleChange(splitNumbers.join(' ').substr(0, maxLength));
-			}
+			customHandleChange(splitNumbers.join(' ').substr(0, maxLength));
 
 			target.value = splitNumbers.join(' ').substr(0, maxLength);
 			break;
@@ -65,8 +84,8 @@ export const generateField = ({
 	fieldInput.id = id;
 	fieldInput.type = type;
 	fieldInput.placeholder = wrapper.getAttribute('data-placeholder') || '';
-	fieldInput.addEventListener('keyup', (event) =>
-		handleKeyUp(event, {
+	fieldInput.addEventListener('input', (event) =>
+		handleKeyUp(event as InputEvent, {
 			validationType,
 			maxLength,
 			customHandleChange
