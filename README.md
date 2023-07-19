@@ -54,7 +54,8 @@ export default () => {
 				const cardCollect = await CardCollect({
 					displayErrors: true, // Optional. It will display error messages automatically without any extra configurations
 					onFieldChange: handleFieldChange, // Optional. It will retrieve an object with metadata to perform extra validations
-					validateOnChange: false // Optional. It will validate on change even before form submission
+					validateOnChange: false // Optional [default false]. It will validate on change even before form submission
+					displayHelpIcons: true, // Optional [default false]. It will display the CVV and Expiry Date placeholder icons inside the input
 				});
 				setCardCollect(cardCollect);
 			}
@@ -103,7 +104,8 @@ export default () => {
 				this.cardCollect = await CardCollect({
 					displayErrors: true, // Optional. It will display error messages automatically without any extra configurations
 					onFieldChange: handleFieldChange, // Optional. It will retrieve an object with metadata to perform extra validations
-					validateOnChange: false, // Optional. It will validate on change even before form submission
+					validateOnChange: false // Optional [default false]. It will validate on change even before form submission
+					displayHelpIcons: true, // Optional [default false]. It will display the CVV and Expiry Date placeholder icons inside the input
 				});
 			};
 
@@ -160,7 +162,8 @@ Please use dist/cardCollect-web.js and include it in your html file
 			const { cardCollect_submit } = await cardCollect({
 				displayErrors: true, // Optional. It will display error messages automatically without any extra configurations
 				onFieldChange: handleFieldChange, // Optional. It will retrieve an object with metadata to perform extra validations
-				validateOnChange: false // Optional. It will validate on change even before form submission
+				validateOnChange: false // Optional [default false]. It will validate on change even before form submission
+				displayHelpIcons: true, // Optional [default false]. It will display the CVV and Expiry Date placeholder icons inside the input
 			});
 
 			// Form setup

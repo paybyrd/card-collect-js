@@ -13,7 +13,8 @@ import './css/default.css';
 export default async ({
 	displayErrors,
 	onFieldChange = () => {},
-	validateOnChange
+	validateOnChange,
+	displayHelpIcons
 }: CardCollectProps = {}): Promise<CardCollectResponse> => {
 	const cHolder = document.getElementById('cc-holder');
 	const cNumber = document.getElementById('cc-number');
@@ -125,7 +126,7 @@ export default async ({
 					}
 				}
 			},
-			inputAddornment: CreditCardPlaceholderExpDate
+			inputAddornment: displayHelpIcons ? CreditCardPlaceholderExpDate : undefined
 		});
 	}
 	if (cCVV) {
@@ -159,7 +160,7 @@ export default async ({
 					}
 				}
 			},
-			inputAddornment: CreditCardPlaceholderCVV
+			inputAddornment: displayHelpIcons ? CreditCardPlaceholderCVV : undefined
 		});
 	}
 

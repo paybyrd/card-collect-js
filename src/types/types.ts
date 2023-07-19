@@ -9,6 +9,7 @@ export type CardCollectProps = {
 	displayErrors?: boolean;
 	onFieldChange?: ({ fieldId, element, error, isValid }: FieldChangeProps) => void;
 	validateOnChange?: boolean;
+	displayHelpIcons?: boolean;
 };
 
 export type SubmitBody = {
