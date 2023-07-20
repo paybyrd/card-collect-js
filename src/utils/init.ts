@@ -19,8 +19,12 @@ const handleKeyUp = (
 			const year = formattedValue.substr(2, 2);
 
 			if (month && event.data && !isNaN(Number(event.data))) {
-				if (Number(event.data) < 10) {
-					formattedValue = `0${month}`;
+				if (Number(event.data) > 0 && Number(event.data) < 10) {
+					if (month.startsWith('0')) {
+						formattedValue = month;
+					} else {
+						formattedValue = `0${month}`;
+					}
 				}
 
 				const normalizedMonth = `${month.substring(1)}${event.data}`;
