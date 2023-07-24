@@ -1,47 +1,31 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<title>Paybyrd card collect</title>
-		<style>
-			div.myfield {
-				height: 60px;
-			}
-			div.myfield > input {
-				background: purple;
-			}
-		</style>
-		<script src="cardCollect-web.js"></script>
-	</head>
-	<body>
-		<div id="cardCollect">
-			<div id="cc-holder" class="form-field myfield" data-placeholder="Card Holder"></div>
-			<div id="cc-number" class="form-field" data-placeholder="Card Number"></div>
-			<div class="form-field-group">
-				<div id="cc-expiration-date" class="form-field" data-placeholder="MM/YY"></div>
-				<div id="cc-cvc" class="form-field" data-placeholder="CVV"></div>
-			</div>
-			<button class="form-button" id="submit-form">Submit</button>
-		</div>
-		<script>
-			async function init() {
-				const handleSubmit = () => {
-					cardCollect_submit()
-						// Handle paybyrd's response here
-						.then(({ status, data }) => console.log('Success:', status, data))
-						// Handle any errors here
-						.catch((error) => console.log('Error:', error));
-				};
+<!doctype html><html><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Paybyrd card collect</title><style>div.myfield {
+			height: 60px;
+		}
+		div.myfield > input {
+			background: purple;
+		}</style><script defer="defer" src="main.mjs"></script></head><body><div id="cardCollect"><div id="cc-holder" class="form-field myfield" data-placeholder="Card Holder"></div><div id="cc-number" class="form-field" data-placeholder="Card Number"></div><div class="form-field-group"><div id="cc-expiration-date" class="form-field" data-placeholder="MM/YY"></div><div id="cc-cvc" class="form-field" data-placeholder="CVV"></div></div><button class="form-button" id="submit-form">Submit</button></div><script type="module">async function init() {
+			const handleSubmit = () => {
+				cardCollect_submit()
+					// Handle paybyrd's response here
+					.then(({ status, data }) => console.log("Success:", status, data))
+					// Handle any errors here
+					.catch((error) => console.log("Error:", error));
+			};
 
-				// Paybyrd card collect initialization
-				const { cardCollect_submit } = await cardCollect({ displayErrors: true });
-
-				// Form setup
-				document.getElementById('submit-form').onclick = handleSubmit;
+			const handleFieldChange = ({ fieldId, element, error, isValid }) => {
+				console.log(fieldId, element, error, isValid);
 			}
 
-			init();
-		</script>
-	</body>
-</html>
+			// Paybyrd card collect initialization
+			const { cardCollect_submit } = await cardCollect({
+				displayErrors: true,
+				onFieldChange: handleFieldChange,
+				validateOnChange: false,
+				displayHelpIcons: true,
+			});
+
+			// Form setup
+			document.getElementById("submit-form").onclick = handleSubmit;
+		}
+
+		init();</script></body></html>
