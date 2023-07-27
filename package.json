@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"description": "Paybyrd's tool to aid in the creation of credit card info collect forms",
 	"main": "dist/cardCollect.js",
+	"types": "./dist/index.d.ts",
 	"engines": {
 		"node": ">=16.0.0"
 	},
