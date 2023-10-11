@@ -7,7 +7,7 @@ const handleKeyUp = (
 	{ validationType, maxLength, customHandleChange }: InputChangeProps
 ) => {
 	const target = event.target as HTMLInputElement;
-	let formattedValue = regexOnlyNumbers(target.value);
+	const formattedValue = regexOnlyNumbers(target.value);
 
 	switch (validationType) {
 		case 'holderName': {
@@ -15,36 +15,26 @@ const handleKeyUp = (
 			break;
 		}
 		case 'expirationDate': {
-			let month = formattedValue.substr(0, 2);
-			const year = formattedValue.substr(2, 2);
+			const expDate = formattedValue
+				.replace(
+					/^([2-9])$/g,
+					'0$1' // To handle 3 > 03
+				)
+				.replace(
+					/^(1{1})([3-9]{1})$/g,
+					'0$1/$2' // 13 > 01/3
+				)
+				.replace(
+					/^0{1,}/g,
+					'0' // To handle 00 > 0
+				)
+				.replace(
+					/^([0-1]{1}[0-9]{1})([0-9]{1,2}).*/g,
+					'$1/$2' // To handle 113 > 11/3
+				);
 
-			if (month && event.data && !isNaN(Number(event.data))) {
-				if (Number(event.data) > 0 && Number(event.data) < 10) {
-					if (month.startsWith('0')) {
-						formattedValue = month;
-					} else {
-						formattedValue = `0${month}`;
-					}
-				}
-
-				const normalizedMonth = `${month.substring(1)}${event.data}`;
-				if (month.startsWith('0') && month.length === 2 && Number(normalizedMonth) <= 12) {
-					customHandleChange(normalizedMonth);
-					target.value = normalizedMonth;
-					return;
-				}
-			}
-
-			if (Number(month) > 12) {
-				month = '12';
-			}
-
-			if (year) {
-				formattedValue = `${month}/${year}`;
-			}
-
-			customHandleChange(formattedValue);
-			target.value = formattedValue;
+			customHandleChange(expDate);
+			target.value = expDate;
 			break;
 		}
 		case 'cvv': {
