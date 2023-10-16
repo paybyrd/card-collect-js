@@ -2,8 +2,8 @@ import { InputChangeProps, GenerateFieldProps } from '../types/types';
 
 import { regexOnlyNumbers } from './validations';
 
-const handleKeyUp = (
-	event: InputEvent,
+const handleKeyEvent = (
+	event: KeyboardEvent,
 	{ validationType, maxLength, customHandleChange }: InputChangeProps
 ) => {
 	const target = event.target as HTMLInputElement;
@@ -15,46 +15,65 @@ const handleKeyUp = (
 			break;
 		}
 		case 'expirationDate': {
-			const expDate = formattedValue
+			if (
+				target.value.length === 2 &&
+				(event.code === 'Backspace' || event.code === 'Delete')
+			) {
+				customHandleChange(target.value.substring(0, 1));
+				target.value = target.value.substring(0, 1);
+				break;
+			}
+
+			const expDate = target.value
 				.replace(
-					/^([2-9])$/g,
-					'0$1' // To handle 3 > 03
+					/^([1-9]\/|[2-9])$/g,
+					'0$1/' // 3 > 03/
 				)
 				.replace(
-					/^(1{1})([3-9]{1})$/g,
+					/^(0[1-9]|1[0-2])$/g,
+					'$1/' // 11 > 11/
+				)
+				.replace(
+					/^([0-1])([3-9])$/g,
 					'0$1/$2' // 13 > 01/3
 				)
 				.replace(
-					/^0{1,}/g,
-					'0' // To handle 00 > 0
+					/^(0?[1-9]|1[0-2])([0-9]{2})$/g,
+					'$1/$2' // 141 > 01/41
 				)
 				.replace(
-					/^([0-1]{1}[0-9]{1})([0-9]{1,2}).*/g,
-					'$1/$2' // To handle 113 > 11/3
+					/^([0]+)\/|[0]+$/g,
+					'0' // 0/ > 0 and 00 > 0
+				)
+				.replace(
+					/[^\d/]|^[/]*$/g,
+					'' // To allow only digits and `/`
+				)
+				.replace(
+					/\/\//g,
+					'/' // Prevent entering more than 1 `/`
 				);
 
-			customHandleChange(expDate);
-			target.value = expDate;
+			customHandleChange(expDate.substring(0, maxLength));
+			target.value = expDate.substring(0, maxLength);
 			break;
 		}
 		case 'cvv': {
-			target.value = formattedValue.substr(0, maxLength);
-			customHandleChange(formattedValue.substr(0, maxLength));
+			target.value = formattedValue.substring(0, maxLength);
+			customHandleChange(formattedValue.substring(0, maxLength));
 			break;
 		}
 		case 'cardNumber': {
 			const splitNumbers = (formattedValue || '').match(/.{1,4}/g);
 
 			if (!splitNumbers) {
-				customHandleChange(formattedValue.substr(0, maxLength));
-
-				target.value = formattedValue.substr(0, maxLength);
+				customHandleChange(formattedValue.substring(0, maxLength));
+				target.value = formattedValue.substring(0, maxLength);
 				break;
 			}
 
-			customHandleChange(splitNumbers.join(' ').substr(0, maxLength));
-
-			target.value = splitNumbers.join(' ').substr(0, maxLength);
+			customHandleChange(splitNumbers.join(' ').substring(0, maxLength));
+			target.value = splitNumbers.join(' ').substring(0, maxLength);
 			break;
 		}
 		default: {
@@ -69,6 +88,7 @@ export const generateField = ({
 	id,
 	maxLength,
 	validationType,
+	eventType,
 	customHandleChange,
 	inputAddornment
 }: GenerateFieldProps) => {
@@ -78,8 +98,8 @@ export const generateField = ({
 	fieldInput.id = id;
 	fieldInput.type = type;
 	fieldInput.placeholder = wrapper.getAttribute('data-placeholder') || '';
-	fieldInput.addEventListener('input', (event) =>
-		handleKeyUp(event as InputEvent, {
+	fieldInput.addEventListener(eventType || 'input', (event) =>
+		handleKeyEvent(event as KeyboardEvent, {
 			validationType,
 			maxLength,
 			customHandleChange

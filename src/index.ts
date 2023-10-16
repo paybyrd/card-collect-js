@@ -102,6 +102,7 @@ export default async ({
 			type: 'tel',
 			id: 'pb-cc-exp-date',
 			validationType: 'expirationDate',
+			eventType: 'keyup',
 			customHandleChange: (expDate: string) => {
 				const { isValid, errors } = validateFields({
 					dateValue: expDate
