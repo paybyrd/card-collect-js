@@ -31,6 +31,7 @@ export type GenerateFieldProps = {
 	validationType?: string;
 	customHandleChange: (value: string) => void;
 	inputAddornment?: string;
+	eventType?: 'keydown' | 'keyup' | 'input';
 };
 
 export type InputChangeProps = {
