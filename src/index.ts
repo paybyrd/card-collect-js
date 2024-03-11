@@ -187,7 +187,7 @@ export default async ({
 
 		const holderValue = cHolder?.getElementsByTagName('input')[0]?.value;
 		const cardValue = cNumber?.getElementsByTagName('input')[0]?.value.replace(/ /g, '');
-		let dateValue = cExpDate?.getElementsByTagName('input')[0]?.value;
+		let dateValue = cExpDate?.getElementsByTagName('input')[0]?.value.replace('/', '');
 		const cvvValue = cCVV?.getElementsByTagName('input')[0]?.value;
 
 		if (dateValue && /^\d{3,4}$/.test(dateValue)) {
