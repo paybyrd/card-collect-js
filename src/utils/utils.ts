@@ -1,16 +1,16 @@
-const Amex = require('../icons/AmexIcon.svg') as string;
-const ApplePay = require('../icons/ApplePayIcon.svg') as string;
-const Discover = require('../icons/DiscoverIcon.svg') as string;
-const Elo = require('../icons/EloIcon.svg') as string;
-const Maestro = require('../icons/MaestroIcon.svg') as string;
-const MasterCard = require('../icons/MasterCardIcon.svg') as string;
-const CarteBancaire = require('../icons/CarteBancaireIcon.svg') as string;
-const Dankort = require('../icons/DankortIcon.svg') as string;
-const DinersClub = require('../icons/DinersClubIcon.svg') as string;
-const JCB = require('../icons/JCBIcon.svg') as string;
-const VPay = require('../icons/VPayIcon.svg') as string;
-const Visa = require('../icons/VisaIcon.svg') as string;
-const CreditCardPlaceholder = require('../icons/CreditCardPlaceholder.svg') as string;
+import Amex from '../icons/AmexIcon.svg';
+import ApplePay from '../icons/ApplePayIcon.svg';
+import Discover from '../icons/DiscoverIcon.svg';
+import Elo from '../icons/EloIcon.svg';
+import Maestro from '../icons/MaestroIcon.svg';
+import MasterCard from '../icons/MasterCardIcon.svg';
+import CarteBancaire from '../icons/CarteBancaireIcon.svg';
+import Dankort from '../icons/DankortIcon.svg';
+import DinersClub from '../icons/DinersClubIcon.svg';
+import JCB from '../icons/JCBIcon.svg';
+import VPay from '../icons/VPayIcon.svg';
+import Visa from '../icons/VisaIcon.svg';
+import CreditCardPlaceholder from '../icons/CreditCardPlaceholder.svg';
 
 export function getIconFromBrandCode(brandCode: string) {
 	switch (brandCode) {

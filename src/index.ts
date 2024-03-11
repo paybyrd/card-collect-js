@@ -4,9 +4,9 @@ import { generateField } from './utils/init';
 import { validateFields, clearValidations, generateError } from './utils/validations';
 import { getBrandByCardNumber } from './utils/utils';
 
-const CreditCardPlaceholder = require('./icons/CreditCardPlaceholder.svg') as string;
-const CreditCardPlaceholderCVV = require('./icons/CreditCardPlaceholderCVV.svg') as string;
-const CreditCardPlaceholderExpDate = require('./icons/CreditCardPlaceholderExpDate.svg') as string;
+import CreditCardPlaceholder from './icons/CreditCardPlaceholder.svg';
+import CreditCardPlaceholderCVV from './icons/CreditCardPlaceholderCVV.svg';
+import CreditCardPlaceholderExpDate from './icons/CreditCardPlaceholderExpDate.svg';
 
 import './css/default.css';
 
@@ -66,7 +66,7 @@ export default async ({
 				const wrapper = cNumber && cNumber.querySelector('.form-field-addornment');
 
 				if (wrapper) {
-					wrapper.innerHTML = getBrandByCardNumber((cardNumber || '').replace(/ /g, ''));
+					wrapper.innerHTML = getBrandByCardNumber((cardNumber || '').replace(' ', ''));
 				}
 
 				const { isValid, errors } = validateFields({
@@ -187,8 +187,13 @@ export default async ({
 
 		const holderValue = cHolder?.getElementsByTagName('input')[0]?.value;
 		const cardValue = cNumber?.getElementsByTagName('input')[0]?.value.replace(/ /g, '');
-		const dateValue = cExpDate?.getElementsByTagName('input')[0]?.value;
+		let dateValue = cExpDate?.getElementsByTagName('input')[0]?.value.replace('/', '');
 		const cvvValue = cCVV?.getElementsByTagName('input')[0]?.value;
+
+		if (dateValue && /^\d{3,4}$/.test(dateValue)) {
+			const normalizedDate = dateValue.padStart(4, '0');
+			dateValue = `${normalizedDate.slice(0, 2)}/${normalizedDate.slice(2)}`;
+		}
 
 		const { isValid, errors } = validateFields({
 			holderValue,
@@ -197,31 +202,31 @@ export default async ({
 			cvvValue
 		});
 
-		if (!isValid) {
-			isDirty = true;
-
-			Object.entries(errors).map((error) => {
-				const field = document.getElementById(error[0]);
-				const errorData = error[1];
-
-				if (field) {
-					generateError({
-						field,
-						displayErrors,
-						errorData
-					});
-				}
+		if (isValid) {
+			return handleFetch(`https://${PAYBYRD_TOKEN_URL}/api/v1/tokens`, {
+				number: cardValue,
+				expiration: dateValue,
+				cvv: cvvValue,
+				holder: holderValue
 			});
-
-			return Promise.reject(errors);
 		}
+		
+		isDirty = true;
 
-		return handleFetch(`https://${PAYBYRD_TOKEN_URL}/api/v1/tokens`, {
-			number: cardValue,
-			expiration: dateValue,
-			cvv: cvvValue,
-			holder: holderValue
+		Object.entries(errors).map((error) => {
+			const field = document.getElementById(error[0]);
+			const errorData = error[1];
+
+			if (field) {
+				generateError({
+					field,
+					displayErrors,
+					errorData
+				});
+			}
 		});
+
+		return Promise.reject(errors);
 	};
 
 	return { cardCollect_submit: submit };

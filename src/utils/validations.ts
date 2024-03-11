@@ -5,7 +5,7 @@ export const regexOnlyNumbers = (value: string) => {
 	return value.replace(/[^0-9]/g, '');
 };
 
-const dateRegex = new RegExp(/\b(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})\b/);
+const dateRegex = new RegExp(/\b(0[1-9]|1[0-2])\/([0-9]{4}|[0-9]{2})\b/);
 const cvvRegex = new RegExp(/^[0-9]{3,4}$/);
 
 export const validateFields = ({
