@@ -32,7 +32,7 @@ describe('CardCollect', () => {
             }
         });
 
-    })
+    });
 
     it('cardCollect function should be defined', () => {
         expect(cardCollect).toBeDefined();
@@ -122,6 +122,6 @@ describe('CardCollect', () => {
                 },
                 body: expect.stringContaining('{"number":"5555341244441115","expiration":"01/30","cvv":"123","holder":"Paybyrd"}')
             })
-        )
+        );
     });
 });
