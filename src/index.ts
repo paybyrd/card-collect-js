@@ -187,8 +187,13 @@ export default async ({
 
 		const holderValue = cHolder?.getElementsByTagName('input')[0]?.value;
 		const cardValue = cNumber?.getElementsByTagName('input')[0]?.value.replace(/ /g, '');
-		const dateValue = cExpDate?.getElementsByTagName('input')[0]?.value;
+		let dateValue = cExpDate?.getElementsByTagName('input')[0]?.value;
 		const cvvValue = cCVV?.getElementsByTagName('input')[0]?.value;
+
+		if (dateValue && /^\d{3,4}$/.test(dateValue)) {
+			const normalizedDate = dateValue.padStart(4, '0');
+			dateValue = `${normalizedDate.slice(0, 2)}/${normalizedDate.slice(2)}`;
+		}
 
 		const { isValid, errors } = validateFields({
 			holderValue,
@@ -197,31 +202,31 @@ export default async ({
 			cvvValue
 		});
 
-		if (!isValid) {
-			isDirty = true;
-
-			Object.entries(errors).map((error) => {
-				const field = document.getElementById(error[0]);
-				const errorData = error[1];
-
-				if (field) {
-					generateError({
-						field,
-						displayErrors,
-						errorData
-					});
-				}
+		if (isValid) {
+			return handleFetch(`https://${PAYBYRD_TOKEN_URL}/api/v1/tokens`, {
+				number: cardValue,
+				expiration: dateValue,
+				cvv: cvvValue,
+				holder: holderValue
 			});
-
-			return Promise.reject(errors);
 		}
+		
+		isDirty = true;
 
-		return handleFetch(`https://${PAYBYRD_TOKEN_URL}/api/v1/tokens`, {
-			number: cardValue,
-			expiration: dateValue,
-			cvv: cvvValue,
-			holder: holderValue
+		Object.entries(errors).map((error) => {
+			const field = document.getElementById(error[0]);
+			const errorData = error[1];
+
+			if (field) {
+				generateError({
+					field,
+					displayErrors,
+					errorData
+				});
+			}
 		});
+
+		return Promise.reject(errors);
 	};
 
 	return { cardCollect_submit: submit };
