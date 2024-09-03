@@ -44,8 +44,8 @@ export default () => {
 			.catch((error) => console.log('Error:', error)); // Handle any errors here
 	};
 
-	const handleFieldChange = ({ fieldId, element, error, isValid }) => {
-		console.log(fieldId, element, error, isValid);
+	const handleFieldChange = ({ fieldId, element, error, value, isValid }) => {
+		console.log(fieldId, element, error, value, isValid);
 	};
 
 	useEffect(() => {
@@ -55,7 +55,14 @@ export default () => {
 					displayErrors: true, // Optional. It will display error messages automatically without any extra configurations
 					onFieldChange: handleFieldChange, // Optional. It will retrieve an object with metadata to perform extra validations
 					validateOnChange: false // Optional [default false]. It will validate on change even before form submission
-					displayHelpIcons: true, // Optional [default false]. It will display the CVV and Expiry Date placeholder icons inside the input
+					displayHelpIcons: true, // Optional [default false]. It will display the CVV and Expiry Date placeholder icons inside the input,
+					handleCardValuesOnSubmit: true, // Optional [default false]. It will not tokenize the card by default and it will return the card data so the consumer can submit as it's needed
+					i18nMessages: { // Optional [default null]. It will override the default validation messages before submitting fields so it can be translated to different languages
+						requiredField: 'Validation message that overrides the default one',
+						invalidCardNumber: 'Validation message that overrides the default one',
+						invalidExpirationDate: 'Validation message that overrides the default one',
+						invalidCVV: 'Validation message that overrides the default one')
+					},
 				});
 				setCardCollect(cardCollect);
 			}
@@ -95,8 +102,8 @@ export default () => {
 					.then(({ status, data }) => console.log('Success:', status, data)) // Handle paybyrd's response here
 					.catch((error) => console.log('Error:', error)); // Handle any errors here
 			},
-			handleFieldChange: ({ fieldId, element, error, isValid }) {
-				console.log(fieldId, element, error, isValid);
+			handleFieldChange: ({ fieldId, element, error, value, isValid }) {
+				console.log(fieldId, element, error, value, isValid);
 			}
 		},
 		mounted() {
@@ -154,8 +161,8 @@ Please use dist/cardCollect-web.js and include it in your html file
 					.catch((error) => console.log('Error:', error)); // Handle any errors here
 			};
 
-			const handleFieldChange = ({ fieldId, element, error, isValid }) => {
-				console.log(fieldId, element, error, isValid);
+			const handleFieldChange = ({ fieldId, element, error, value, isValid }) => {
+				console.log(fieldId, element, error, value, isValid);
 			};
 
 			// Paybyrd card collect initialization

@@ -2,13 +2,18 @@ type FieldChangeProps = {
     fieldId: string;
     element: HTMLElement;
     error: Record<string, string>;
+    value: string;
     isValid: boolean;
 };
+type i18nMessagesTypes = 'requiredField' | 'invalidCardNumber' | 'invalidExpirationDate' | 'invalidCVV';
 export type CardCollectProps = {
     displayErrors?: boolean;
-    onFieldChange?: ({ fieldId, element, error, isValid }: FieldChangeProps) => void;
+    onFieldChange?: ({ fieldId, element, error, value, isValid }: FieldChangeProps) => void;
     validateOnChange?: boolean;
     displayHelpIcons?: boolean;
+    handleCardValuesOnSubmit?: boolean;
+    i18nMessages?: Record<i18nMessagesTypes, string>;
+    version?: number;
 };
 export type SubmitBody = {
     number?: string;
@@ -30,6 +35,7 @@ export type GenerateFieldProps = {
     validationType?: string;
     customHandleChange: (value: string) => void;
     inputAddornment?: string;
+    eventType?: 'keydown' | 'keyup' | 'input';
 };
 export type InputChangeProps = {
     validationType?: string;
@@ -41,6 +47,7 @@ export type ValidateFieldsProps = {
     cardValue?: string;
     dateValue?: string;
     cvvValue?: string;
+    i18nMessages?: Record<i18nMessagesTypes, string>;
 };
 export type ErrorData = {
     type: string;

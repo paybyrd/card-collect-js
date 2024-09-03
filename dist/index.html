@@ -1,7 +1,8 @@
 <!doctype html><html><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Paybyrd card collect</title><style>div.myfield {
 			height: 60px;
 		}
-		div.myfield > input {
+
+		div.myfield>input {
 			background: purple;
 		}</style><script defer="defer" src="main.mjs"></script></head><body><div id="cardCollect"><div id="cc-holder" class="form-field myfield" data-placeholder="Card Holder"></div><div id="cc-number" class="form-field" data-placeholder="Card Number"></div><div class="form-field-group"><div id="cc-expiration-date" class="form-field" data-placeholder="MM/YY"></div><div id="cc-cvc" class="form-field" data-placeholder="CVV"></div></div><button class="form-button" id="submit-form">Submit</button></div><script type="module">async function init() {
 			const handleSubmit = () => {
@@ -12,8 +13,8 @@
 					.catch((error) => console.log("Error:", error));
 			};
 
-			const handleFieldChange = ({ fieldId, element, error, isValid }) => {
-				console.log(fieldId, element, error, isValid);
+			const handleFieldChange = ({ fieldId, element, error, value, isValid }) => {
+				console.log(fieldId, element, error, value, isValid);
 			}
 
 			// Paybyrd card collect initialization
