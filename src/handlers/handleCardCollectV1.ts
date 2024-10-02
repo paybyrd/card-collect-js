@@ -213,43 +213,43 @@ const handleCardCollectV1 = ({
 			i18nMessages
 		});
 
-		if (isValid) {
-			if (handleCardValuesOnSubmit) {
-				return Promise.resolve({
-					status: '200',
-					data: {
-						holderValue: holderValue || '',
-						cardValue: cardValue || '',
-						dateValue: dateValue || '',
-						cvvValue: cvvValue || ''
-					}
-				});
-			}
+		if (!isValid) {
+			isDirty = true;
 
-			return handleFetch(`https://${PAYBYRD_TOKEN_URL}/api/v1/tokens`, {
-				number: cardValue,
-				expiration: dateValue,
-				cvv: cvvValue,
-				holder: holderValue
+			Object.entries(errors).map((error) => {
+				const field = document.getElementById(error[0]);
+				const errorData = error[1];
+
+				if (field) {
+					generateError({
+						field,
+						displayErrors,
+						errorData
+					});
+				}
+			});
+
+			return Promise.reject(errors);
+		}
+
+		if (handleCardValuesOnSubmit) {
+			return Promise.resolve({
+				status: '200',
+				data: {
+					holderValue: holderValue || '',
+					cardValue: cardValue || '',
+					dateValue: dateValue || '',
+					cvvValue: cvvValue || ''
+				}
 			});
 		}
 
-		isDirty = true;
-
-		Object.entries(errors).map((error) => {
-			const field = document.getElementById(error[0]);
-			const errorData = error[1];
-
-			if (field) {
-				generateError({
-					field,
-					displayErrors,
-					errorData
-				});
-			}
+		return handleFetch(`https://${PAYBYRD_TOKEN_URL}/api/v1/tokens`, {
+			number: cardValue,
+			expiration: dateValue,
+			cvv: cvvValue,
+			holder: holderValue
 		});
-
-		return Promise.reject(errors);
 	};
 
 	return { cardCollect_submit: submit };
