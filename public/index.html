@@ -10,7 +10,8 @@
 		div.myfield {
 			height: 60px;
 		}
-		div.myfield > input {
+
+		div.myfield>input {
 			background: purple;
 		}
 	</style>
@@ -37,8 +38,8 @@
 					.catch((error) => console.log("Error:", error));
 			};
 
-			const handleFieldChange = ({ fieldId, element, error, isValid }) => {
-				console.log(fieldId, element, error, isValid);
+			const handleFieldChange = ({ fieldId, element, error, value, isValid }) => {
+				console.log(fieldId, element, error, value, isValid);
 			}
 
 			// Paybyrd card collect initialization

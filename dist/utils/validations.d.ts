@@ -1,6 +1,6 @@
 import { ValidateFieldsProps, ErrorData, GenerateErrorProps } from '../types/types';
 export declare const regexOnlyNumbers: (value: string) => string;
-export declare const validateFields: ({ holderValue, cardValue, dateValue, cvvValue }: ValidateFieldsProps) => {
+export declare const validateFields: ({ holderValue, cardValue, dateValue, cvvValue, i18nMessages }: ValidateFieldsProps) => {
     isValid: boolean;
     errors: Record<string, ErrorData>;
 };

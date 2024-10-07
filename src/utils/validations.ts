@@ -12,14 +12,18 @@ export const validateFields = ({
 	holderValue,
 	cardValue,
 	dateValue,
-	cvvValue
+	cvvValue,
+	i18nMessages
 }: ValidateFieldsProps) => {
 	const errors: Record<string, ErrorData> = {};
 
 	// Card Holder Validations
 	if (holderValue !== undefined) {
 		if (!holderValue) {
-			errors['cc-holder'] = { type: 'required', message: 'This field is required' };
+			errors['cc-holder'] = {
+				type: 'required',
+				message: i18nMessages?.requiredField || 'This field is required'
+			};
 		}
 	}
 
@@ -28,20 +32,29 @@ export const validateFields = ({
 		const cardData = validateCreditCard(cardValue);
 
 		if (!cardValue) {
-			errors['cc-number'] = { type: 'required', message: 'This field is required' };
+			errors['cc-number'] = {
+				type: 'required',
+				message: i18nMessages?.requiredField || 'This field is required'
+			};
 		} else if (cardValue.length < 14 || !cardData.success) {
-			errors['cc-number'] = { type: 'invalidCard', message: 'The card number must be valid' };
+			errors['cc-number'] = {
+				type: 'invalidCard',
+				message: i18nMessages?.invalidCardNumber || 'The card number must be valid'
+			};
 		}
 	}
 
 	// Card Expiration Date Validations
 	if (dateValue !== undefined) {
 		if (!dateValue) {
-			errors['cc-expiration-date'] = { type: 'required', message: 'This field is required' };
+			errors['cc-expiration-date'] = {
+				type: 'required',
+				message: i18nMessages?.requiredField || 'This field is required'
+			};
 		} else if (!dateRegex.test(dateValue)) {
 			errors['cc-expiration-date'] = {
 				type: 'invalidDate',
-				message: 'The expiration date must be valid'
+				message: i18nMessages?.invalidExpirationDate || 'The expiration date must be valid'
 			};
 		}
 	}
@@ -49,9 +62,15 @@ export const validateFields = ({
 	// Card CVV Validations
 	if (cvvValue !== undefined) {
 		if (!cvvValue || cvvValue === '') {
-			errors['cc-cvc'] = { type: 'required', message: 'This field is required' };
+			errors['cc-cvc'] = {
+				type: 'required',
+				message: i18nMessages?.requiredField || 'This field is required'
+			};
 		} else if (!cvvRegex.test(cvvValue)) {
-			errors['cc-cvc'] = { type: 'invalidCVV', message: 'The CVV must be valid' };
+			errors['cc-cvc'] = {
+				type: 'invalidCVV',
+				message: i18nMessages?.invalidCVV || 'The CVV must be valid'
+			};
 		}
 	}
 
