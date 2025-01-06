@@ -16,7 +16,11 @@
 	box-sizing: border-box;
 	padding: 0 10px;
 	border-radius: 4px;
-	box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.3);
+	border: 1px solid rgba(0, 0, 0, 0.23);
+}
+
+.form-field:hover > input {
+	border-color: 1px solid #555555;
 }
 
 #cc-number.form-field > input {
@@ -24,12 +28,11 @@
 }
 
 .form-field > input:focus {
-	border: none;
 	outline: none;
 }
 
 .form-error > input {
-	box-shadow: 0 0 3px 0px rgba(255, 0, 0, 0.7);
+	border: 1px solid rgb(239, 83, 80);
 }
 
 .form-field-group {
@@ -75,7 +78,7 @@
 	font-weight: bold;
 	border: 1px solid rgb(60, 60, 60);
 	pointer-events: none;
-	bottom: -30px;
+	bottom: -40px;
 }
 
 .form-field-error:before {
@@ -118,4 +121,5 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	pointer-events: none;
 }

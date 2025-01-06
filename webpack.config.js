@@ -21,7 +21,7 @@ module.exports = () => {
 			}
 		},
 		devServer: {
-			port: 3000,
+			port: 80,
 			historyApiFallback: true
 		},
 		module: {

@@ -12,6 +12,16 @@ type i18nMessagesTypes =
 	| 'invalidExpirationDate'
 	| 'invalidCVV';
 
+type TokenizedDataProps = {
+	cardType: string;
+	cvvIncluded: boolean;
+	firstSix: string;
+	lastFour: string;
+	referenceNumber: string;
+	token: string;
+	tokenHMAC: string;
+};
+
 export type CardCollectProps = {
 	displayErrors?: boolean;
 	onFieldChange?: ({ fieldId, element, error, value, isValid }: FieldChangeProps) => void;
@@ -20,6 +30,18 @@ export type CardCollectProps = {
 	handleCardValuesOnSubmit?: boolean;
 	i18nMessages?: Record<i18nMessagesTypes, string>;
 	version?: number;
+	authenticationKey?: string;
+	timestamp?: string;
+	tokenScheme?: string;
+	tokenExID?: string;
+	origin?: string;
+	onTokenize?: (data: TokenizedDataProps) => void;
+	onTokenexFrameLoaded?: (isLoaded: boolean) => void;
+	onTokenexFrameExpires?: (isExpired: boolean) => void;
+	tokenExFieldsCss?: {
+		base?: string;
+		error?: string;
+	};
 };
 
 export type SubmitBody = {
@@ -29,17 +51,28 @@ export type SubmitBody = {
 	holder?: string;
 };
 
+export type FetchProps = {
+	url: string;
+	body?: SubmitBody;
+	method?: string;
+};
+export type FetchResponse = {
+	status: number;
+	data: Record<string, string>;
+};
+
 export type CardCollectResponse = {
-	cardCollect_submit: () => Promise<{ status: string; data: Record<string, string> }>;
+	cardCollect_submit: () => Promise<FetchResponse>;
+	destroy?: () => void;
 };
 
 export type GenerateFieldProps = {
 	type?: string;
 	wrapper: HTMLElement;
 	maxLength?: number;
-	id: string;
+	id?: string;
 	validationType?: string;
-	customHandleChange: (value: string) => void;
+	customHandleChange?: (value: string) => void;
 	inputAddornment?: string;
 	eventType?: 'keydown' | 'keyup' | 'input';
 };
@@ -64,7 +97,7 @@ export type ErrorData = {
 };
 
 export type GenerateErrorProps = {
-	field: HTMLElement;
+	field?: HTMLElement | null;
 	displayErrors?: boolean;
 	errorData: Record<string, string>;
 };

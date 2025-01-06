@@ -42,6 +42,8 @@ export function getIconFromBrandCode(brandCode: string) {
 			return JCB;
 		case 'VPAY':
 			return VPay;
+		case 'UNKNOWN':
+			return CreditCardPlaceholder;
 		default:
 			return '';
 	}

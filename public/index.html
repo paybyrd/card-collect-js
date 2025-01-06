@@ -18,7 +18,8 @@
 </head>
 
 <body>
-	<div id="cardCollect">
+	<div id="loader">Loading...</div>
+	<div id="cardCollect" style="display: none">
 		<div id="cc-holder" class="form-field myfield" data-placeholder="Card Holder"></div>
 		<div id="cc-number" class="form-field" data-placeholder="Card Number"></div>
 		<div class="form-field-group">
@@ -42,12 +43,38 @@
 				console.log(fieldId, element, error, value, isValid);
 			}
 
+			const handleTokenizedData = (data) => {
+				// With new TokenEx integration, this listener is required to get the tokenized
+				// PCI content to finish payment
+				console.log("Tokenex Loaded: ", data);
+			}
+
+			const handleTokenexFrameLoaded = (data) => {
+				// With new TokenEx integration, this listener is used to set a loder while the form
+				// is getting build
+				console.log("Tokenex Form Expired: ", data);
+
+				document.getElementById('cardCollect').style.display = "block";
+				document.getElementById('loader').style.display = "none";
+			}
+
+			const handleTokenexFrameExpired = (data) => {
+				// With new TokenEx integration, this listener is used to set a loder when the form
+				// gets expired and the payment cannot proceed
+				console.log(data);
+			}
+
 			// Paybyrd card collect initialization
-			const { cardCollect_submit } = await cardCollect({
+			const {
+				cardCollect_submit,
+				destroy, // Used to destroy TokenEx's iFrame including listeners 
+			} = await cardCollect({
 				displayErrors: true,
 				onFieldChange: handleFieldChange,
-				validateOnChange: false,
 				displayHelpIcons: true,
+				onTokenize: handleTokenizedData,
+				onTokenexFrameLoaded: handleTokenexFrameLoaded,
+				onTokenexFrameExpires: handleTokenexFrameExpired
 			});
 
 			// Form setup

@@ -5,12 +5,24 @@ type FieldChangeProps = {
 	value: string;
 	isValid: boolean;
 };
+type TokenizedDataProps = {
+	cardType: string;
+	cvvIncluded: boolean;
+	firstSix: string;
+	lastFour: string;
+	referenceNumber: string;
+	token: string;
+	tokenHMAC: string;
+};
 export type CardCollectProps = {
 	displayErrors?: boolean;
 	onFieldChange?: ({ fieldId, element, error, value, isValid }: FieldChangeProps) => void;
 	validateOnChange?: boolean;
 	displayHelpIcons?: boolean;
 	version?: number;
+	onTokenize?: (data: TokenizedDataProps) => void;
+	onTokenexFrameLoaded?: (isLoaded: boolean) => void;
+	onTokenexFrameExpires?: (isExpired: boolean) => void;
 };
 export type SubmitBody = {
 	number?: string;
@@ -18,11 +30,13 @@ export type SubmitBody = {
 	cvv?: string;
 	holder?: string;
 };
+export type FetchResponse = {
+	status: number;
+	data: Record<string, string>;
+};
+
 export type CardCollectResponse = {
-	cardCollect_submit: () => Promise<{
-		status: string;
-		data: Record<string, string>;
-	}>;
+	cardCollect_submit: () => Promise<FetchResponse>;
 };
 export type GenerateFieldProps = {
 	type?: string;

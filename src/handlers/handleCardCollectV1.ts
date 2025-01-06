@@ -1,5 +1,6 @@
-import { CardCollectProps, CardCollectResponse, SubmitBody } from '../types/types';
+import { CardCollectProps, CardCollectResponse } from '../types/types';
 
+import { handleFetch } from '../services/handleFetch';
 import { generateField } from '../utils/init';
 import { validateFields, clearValidations, generateError } from '../utils/validations';
 import { getBrandByCardNumber } from '../utils/utils';
@@ -175,23 +176,6 @@ const handleCardCollectV1 = ({
 		});
 	}
 
-	const handleFetch = (url: string, body: SubmitBody) => {
-		return fetch(url, {
-			method: 'POST',
-			headers: {
-				'x-functions-key': PAYBYRD_CODE_KEY
-			},
-			body: JSON.stringify(body)
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				return {
-					status: '201',
-					data
-				};
-			});
-	};
-
 	const submit = () => {
 		clearValidations(allFields);
 
@@ -234,7 +218,7 @@ const handleCardCollectV1 = ({
 
 		if (handleCardValuesOnSubmit) {
 			return Promise.resolve({
-				status: '200',
+				status: 200,
 				data: {
 					holderValue: holderValue || '',
 					cardValue: cardValue || '',
@@ -244,11 +228,15 @@ const handleCardCollectV1 = ({
 			});
 		}
 
-		return handleFetch(`https://${PAYBYRD_TOKEN_URL}/api/v1/tokens`, {
-			number: cardValue,
-			expiration: dateValue,
-			cvv: cvvValue,
-			holder: holderValue
+		return handleFetch({
+			url: `https://${PAYBYRD_TOKEN_URL}/api/v1/tokens`,
+			method: 'POST',
+			body: {
+				number: cardValue,
+				expiration: dateValue,
+				cvv: cvvValue,
+				holder: holderValue
+			}
 		});
 	};
 

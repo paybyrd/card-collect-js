@@ -89,6 +89,8 @@ export const clearValidations = (fields: Array<HTMLElement | null>) => {
 };
 
 export const generateError = ({ field, displayErrors, errorData }: GenerateErrorProps) => {
+	if (!field) return;
+
 	field.classList.add('form-error');
 
 	if (displayErrors) {
