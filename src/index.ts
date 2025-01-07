@@ -51,6 +51,10 @@ export default async ({
 				});
 			})
 			.catch(() => {
+				// Set frame loaded in case load fails
+				// To avoid stuck loaders and load v1
+				onTokenexFrameLoaded?.(true);
+
 				// Handle default card collect using html template as fallback when error occurs
 				return handleCardCollectV1({
 					displayErrors,
@@ -62,6 +66,10 @@ export default async ({
 				});
 			});
 	}
+
+	// Set frame loaded in case client is using version 1
+	// To avoid stuck loaders
+	onTokenexFrameLoaded?.(true);
 
 	// Handle default card collect using html template
 	return handleCardCollectV1({
