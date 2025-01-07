@@ -33,8 +33,9 @@ const handleCardCollectV2 = ({
 
 	const defaultStyles = {
 		base: `height: 40px; width: 100%; outline: none; box-sizing: border-box; padding: 0 10px; border-radius: 4px; background: transparent; border: 1px solid #ccc; ${tokenExFieldsCss?.base}`,
-		focus: 'outline: none;',
-		error: `box-shadow: 0 0 6px 0 rgb(239, 83, 80);border: 1px solid rgb(239, 83, 80); ${tokenExFieldsCss?.error}`
+		focus: `outline: none; ${tokenExFieldsCss?.focus}`,
+		error: `box-shadow: 0 0 6px 0 rgb(239, 83, 80);border: 1px solid rgb(239, 83, 80); ${tokenExFieldsCss?.error}`,
+		placeholder: tokenExFieldsCss?.placeholder
 	};
 	const tokenExStyles = {
 		...defaultStyles,
@@ -50,19 +51,20 @@ const handleCardCollectV2 = ({
 			tokenExId: tokenExID,
 			tokenScheme
 		},
+		// TODO - Tokenex - The environment should be configurable
 		env: 'test',
 		initialSettings: {
-			expiresInSeconds: 60,
+			// TODO - Tokenex - What should be the amount for timeout?
+			expiresInSeconds: 1200,
 			container: 'cc-number',
 			cvvContainer: 'cc-cvc',
 			pci: true,
 			cvv: true,
-			returnAutoCompleteValues: true,
+			returnAutoCompleteValues: false,
 			useExtendedBin: true
 		},
 		additionalSettings: {
 			styles: tokenExStyles,
-			// TODO - Tokenex - Check with TokenEx team if it's possible to fix TAB focusing hidden exp/cvv fields
 			enableAutoComplete: true,
 			placeholder: cardNumberWrapper?.getAttribute('data-placeholder') || '',
 			cvvPlaceholder: cvvWrapper?.getAttribute('data-placeholder') || '',
@@ -82,8 +84,7 @@ const handleCardCollectV2 = ({
 	});
 
 	TokenizeIframe.onEvent('validate', ({ isCvvValid, isValid, validator }) => {
-		// TODO - Tokenex - Check with TokenEx team if it's possible to split the validate
-		if (!isCvvValid) {
+		if (!isCvvValid && (!!window.CVVFocused || !!window.globalValidation)) {
 			generateError({
 				field: document.getElementById('cc-cvc'),
 				displayErrors,
@@ -93,7 +94,7 @@ const handleCardCollectV2 = ({
 			clearValidations([cCVV]);
 		}
 
-		if (!isValid) {
+		if (!isValid && (!!window.cardNumberFocused || !!window.globalValidation)) {
 			generateError({
 				field: document.getElementById('cc-number'),
 				displayErrors,
@@ -116,6 +117,26 @@ const handleCardCollectV2 = ({
 		} else {
 			isTokenizedDataValid = true;
 		}
+
+		window.globalValidation = false;
+	});
+
+	TokenizeIframe.onEvent('focus', () => {
+		clearValidations([cNumber]);
+		window.cardNumberFocused = true;
+	});
+
+	TokenizeIframe.onEvent('change', () => {
+		window.cardNumberFocused = false;
+	});
+
+	TokenizeIframe.onEvent('cvvFocus', () => {
+		clearValidations([cCVV]);
+		window.CVVFocused = true;
+	});
+
+	TokenizeIframe.onEvent('cvvBlur', () => {
+		window.CVVFocused = false;
 	});
 
 	TokenizeIframe.onEvent('cardTypeChange', (data) => {
@@ -229,6 +250,7 @@ const handleCardCollectV2 = ({
 	}
 
 	const submit = () => {
+		window.globalValidation = true;
 		TokenizeIframe.validate();
 
 		clearValidations([cNumber, cCVV, cHolder, cExpDate]);
@@ -279,12 +301,7 @@ const handleCardCollectV2 = ({
 	};
 
 	return {
-		cardCollect_submit: submit,
-		// TODO - Tokenex - The listeners are not getting removed
-		destroy: () => {
-			TokenizeIframe.reset();
-			TokenizeIframe.remove();
-		}
+		cardCollect_submit: submit
 	};
 };
 

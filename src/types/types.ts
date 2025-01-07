@@ -41,6 +41,8 @@ export type CardCollectProps = {
 	tokenExFieldsCss?: {
 		base?: string;
 		error?: string;
+		focus?: string;
+		placeholder?: string;
 	};
 };
 
@@ -63,7 +65,6 @@ export type FetchResponse = {
 
 export type CardCollectResponse = {
 	cardCollect_submit: () => Promise<FetchResponse>;
-	destroy?: () => void;
 };
 
 export type GenerateFieldProps = {
