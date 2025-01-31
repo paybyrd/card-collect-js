@@ -12,16 +12,6 @@ type i18nMessagesTypes =
 	| 'invalidExpirationDate'
 	| 'invalidCVV';
 
-type TokenizedDataProps = {
-	cardType: string;
-	cvvIncluded: boolean;
-	firstSix: string;
-	lastFour: string;
-	referenceNumber: string;
-	token: string;
-	tokenHMAC: string;
-};
-
 export type CardCollectProps = {
 	displayErrors?: boolean;
 	onFieldChange?: ({ fieldId, element, error, value, isValid }: FieldChangeProps) => void;
@@ -29,21 +19,7 @@ export type CardCollectProps = {
 	displayHelpIcons?: boolean;
 	handleCardValuesOnSubmit?: boolean;
 	i18nMessages?: Record<i18nMessagesTypes, string>;
-	version?: number;
-	authenticationKey?: string;
-	timestamp?: string;
-	tokenScheme?: string;
-	tokenExID?: string;
-	origin?: string;
-	onTokenize?: (data: TokenizedDataProps) => void;
-	onTokenexFrameLoaded?: (isLoaded: boolean) => void;
-	onTokenexFrameExpires?: (isExpired: boolean) => void;
-	tokenExFieldsCss?: {
-		base?: string;
-		error?: string;
-		focus?: string;
-		placeholder?: string;
-	};
+	onCardCollectFrameLoaded?: () => void;
 };
 
 export type SubmitBody = {

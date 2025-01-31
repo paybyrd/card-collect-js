@@ -88,7 +88,7 @@ describe('CardCollect', () => {
 	});
 
 	it('When call cardCollect submit should fix expiration date value', async () => {
-		const { cardCollect_submit } = await cardCollect({ version: 1 });
+		const { cardCollect_submit } = await cardCollect();
 
 		const holder: HTMLInputElement = holderNameMock.getElementsByTagName(
 			'input'

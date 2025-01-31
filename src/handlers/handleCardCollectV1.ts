@@ -15,6 +15,7 @@ const handleCardCollectV1 = ({
 	validateOnChange,
 	displayHelpIcons,
 	handleCardValuesOnSubmit,
+	onCardCollectFrameLoaded,
 	i18nMessages
 }: CardCollectProps = {}): CardCollectResponse => {
 	const cHolder = document.getElementById('cc-holder');
@@ -239,6 +240,8 @@ const handleCardCollectV1 = ({
 			}
 		});
 	};
+
+	onCardCollectFrameLoaded?.();
 
 	return { cardCollect_submit: submit };
 };
