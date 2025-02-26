@@ -54,9 +54,8 @@ export default () => {
 				const cardCollect = await CardCollect({
 					displayErrors: true, // Optional. It will display error messages automatically without any extra configurations
 					onFieldChange: handleFieldChange, // Optional. It will retrieve an object with metadata to perform extra validations
-					validateOnChange: false // Optional [default false]. It will validate on change even before form submission
+					validateOnChange: true // Optional [default true]. It will validate on change even before form submission
 					displayHelpIcons: true, // Optional [default false]. It will display the CVV and Expiry Date placeholder icons inside the input,
-					handleCardValuesOnSubmit: true, // Optional [default false]. It will not tokenize the card by default and it will return the card data so the consumer can submit as it's needed
 					i18nMessages: { // Optional [default null]. It will override the default validation messages before submitting fields so it can be translated to different languages
 						requiredField: 'Validation message that overrides the default one',
 						invalidCardNumber: 'Validation message that overrides the default one',
@@ -111,7 +110,7 @@ export default () => {
 				this.cardCollect = await CardCollect({
 					displayErrors: true, // Optional. It will display error messages automatically without any extra configurations
 					onFieldChange: handleFieldChange, // Optional. It will retrieve an object with metadata to perform extra validations
-					validateOnChange: false // Optional [default false]. It will validate on change even before form submission
+					validateOnChange: true // Optional [default true]. It will validate on change even before form submission
 					displayHelpIcons: true, // Optional [default false]. It will display the CVV and Expiry Date placeholder icons inside the input
 				});
 			};
@@ -169,7 +168,7 @@ Please use dist/cardCollect-web.js and include it in your html file
 			const { cardCollect_submit } = await cardCollect({
 				displayErrors: true, // Optional. It will display error messages automatically without any extra configurations
 				onFieldChange: handleFieldChange, // Optional. It will retrieve an object with metadata to perform extra validations
-				validateOnChange: false // Optional [default false]. It will validate on change even before form submission
+				validateOnChange: true // Optional [default true]. It will validate on change even before form submission
 				displayHelpIcons: true, // Optional [default false]. It will display the CVV and Expiry Date placeholder icons inside the input
 			});
 

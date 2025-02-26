@@ -1,4 +1,4 @@
-import { CardCollectProps, CardCollectResponse, SubmitBody } from '../types/types';
+import { CardCollectProps, CardCollectResponse } from '../types/types';
 
 import { generateField } from '../utils/init';
 import { validateFields, clearValidations, generateError } from '../utils/validations';
@@ -13,7 +13,7 @@ const handleCardCollectV1 = ({
 	onFieldChange = () => {},
 	validateOnChange,
 	displayHelpIcons,
-	handleCardValuesOnSubmit,
+	onCardCollectFrameLoaded,
 	i18nMessages
 }: CardCollectProps = {}): CardCollectResponse => {
 	const cHolder = document.getElementById('cc-holder');
@@ -175,23 +175,6 @@ const handleCardCollectV1 = ({
 		});
 	}
 
-	const handleFetch = (url: string, body: SubmitBody) => {
-		return fetch(url, {
-			method: 'POST',
-			headers: {
-				'x-functions-key': PAYBYRD_CODE_KEY
-			},
-			body: JSON.stringify(body)
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				return {
-					status: '201',
-					data
-				};
-			});
-	};
-
 	const submit = () => {
 		clearValidations(allFields);
 
@@ -232,25 +215,19 @@ const handleCardCollectV1 = ({
 			return Promise.reject(errors);
 		}
 
-		if (handleCardValuesOnSubmit) {
-			return Promise.resolve({
-				status: '200',
-				data: {
-					holderValue: holderValue || '',
-					cardValue: cardValue || '',
-					dateValue: dateValue || '',
-					cvvValue: cvvValue || ''
-				}
-			});
-		}
-
-		return handleFetch(`https://${PAYBYRD_TOKEN_URL}/api/v1/tokens`, {
-			number: cardValue,
-			expiration: dateValue,
-			cvv: cvvValue,
-			holder: holderValue
+		// Returns all card data so it can be used by the client to finish the payment
+		return Promise.resolve({
+			status: 200,
+			data: {
+				holderValue: holderValue || '',
+				cardValue: cardValue || '',
+				dateValue: dateValue || '',
+				cvvValue: cvvValue || ''
+			}
 		});
 	};
+
+	onCardCollectFrameLoaded?.();
 
 	return { cardCollect_submit: submit };
 };

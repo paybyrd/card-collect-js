@@ -92,29 +92,32 @@ export const generateField = ({
 	customHandleChange,
 	inputAddornment
 }: GenerateFieldProps) => {
-	if (document.getElementById(id)) return;
+	if (id) {
+		if (document.getElementById(id)) return;
 
-	const fieldInput = document.createElement('input');
-	fieldInput.id = id;
-	fieldInput.type = type;
-	fieldInput.placeholder = wrapper.getAttribute('data-placeholder') || '';
-	fieldInput.addEventListener(eventType || 'input', (event) =>
-		handleKeyEvent(event as KeyboardEvent, {
-			validationType,
-			maxLength,
-			customHandleChange
-		})
-	);
+		const fieldInput = document.createElement('input');
+		fieldInput.id = id;
+		fieldInput.type = type;
+		fieldInput.placeholder = wrapper.getAttribute('data-placeholder') || '';
+		fieldInput.addEventListener(eventType || 'input', (event) =>
+			handleKeyEvent(event as KeyboardEvent, {
+				validationType,
+				maxLength,
+				customHandleChange: customHandleChange ? customHandleChange : () => {}
+			})
+		);
 
-	if (maxLength) {
-		fieldInput.max = String(maxLength);
+		if (maxLength) {
+			fieldInput.max = String(maxLength);
+		}
+
+		wrapper.append(fieldInput);
 	}
 
 	const errorWrapper = document.createElement('span');
 	errorWrapper.classList.add('form-field-error');
 
 	wrapper.classList.add('form-field');
-	wrapper.append(fieldInput);
 	wrapper.append(errorWrapper);
 
 	if (inputAddornment) {

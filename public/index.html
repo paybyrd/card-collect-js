@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
 	<title>Paybyrd card collect</title>
-
 	<style>
 		div.myfield {
 			height: 60px;
@@ -15,21 +14,20 @@
 			background: purple;
 		}
 	</style>
+	<script defer="defer" src="cardCollect-web.js"></script>
 </head>
 
 <body>
-	<div id="cardCollect">
+	<div id="loader">Loading...</div>
+	<div id="cardCollect" style="display: none">
 		<div id="cc-holder" class="form-field myfield" data-placeholder="Card Holder"></div>
 		<div id="cc-number" class="form-field" data-placeholder="Card Number"></div>
 		<div class="form-field-group">
 			<div id="cc-expiration-date" class="form-field" data-placeholder="MM/YY"></div>
 			<div id="cc-cvc" class="form-field" data-placeholder="CVV"></div>
-		</div>
-		<button class="form-button" id="submit-form">Submit</button>
+		</div><button class="form-button" id="submit-form">Submit</button>
 	</div>
-
-	<script type="module">
-		async function init() {
+	<script type="module">async function init() {
 			const handleSubmit = () => {
 				cardCollect_submit()
 					// Handle paybyrd's response here
@@ -42,20 +40,30 @@
 				console.log(fieldId, element, error, value, isValid);
 			}
 
+			const handleCardCollectFrameLoaded = (data) => {
+				// With new CardCollect integration, this listener is used to set a loder while
+				// the form is getting build
+				console.log("CardCollect Form Loaded: ", data);
+
+				document.getElementById('cardCollect').style.display = "block";
+				document.getElementById('loader').style.display = "none";
+			}
+
 			// Paybyrd card collect initialization
-			const { cardCollect_submit } = await cardCollect({
+			const {
+				cardCollect_submit,
+			} = await cardCollect({
 				displayErrors: true,
 				onFieldChange: handleFieldChange,
-				validateOnChange: false,
 				displayHelpIcons: true,
+				onCardCollectFrameLoaded: handleCardCollectFrameLoaded,
 			});
 
 			// Form setup
 			document.getElementById("submit-form").onclick = handleSubmit;
 		}
 
-		init();
-	</script>
+		init();</script>
 </body>
 
 </html>

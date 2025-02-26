@@ -10,7 +10,7 @@ export type CardCollectProps = {
 	onFieldChange?: ({ fieldId, element, error, value, isValid }: FieldChangeProps) => void;
 	validateOnChange?: boolean;
 	displayHelpIcons?: boolean;
-	version?: number;
+	onCardCollectFrameLoaded?: () => void;
 };
 export type SubmitBody = {
 	number?: string;
@@ -18,11 +18,13 @@ export type SubmitBody = {
 	cvv?: string;
 	holder?: string;
 };
+export type FetchResponse = {
+	status: number;
+	data: Record<string, string>;
+};
+
 export type CardCollectResponse = {
-	cardCollect_submit: () => Promise<{
-		status: string;
-		data: Record<string, string>;
-	}>;
+	cardCollect_submit: () => Promise<FetchResponse>;
 };
 export type GenerateFieldProps = {
 	type?: string;
