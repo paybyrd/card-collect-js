@@ -1,6 +1,5 @@
 import { CardCollectProps, CardCollectResponse } from '../types/types';
 
-import { handleFetch } from '../services/handleFetch';
 import { generateField } from '../utils/init';
 import { validateFields, clearValidations, generateError } from '../utils/validations';
 import { getBrandByCardNumber } from '../utils/utils';
@@ -14,7 +13,6 @@ const handleCardCollectV1 = ({
 	onFieldChange = () => {},
 	validateOnChange,
 	displayHelpIcons,
-	handleCardValuesOnSubmit,
 	onCardCollectFrameLoaded,
 	i18nMessages
 }: CardCollectProps = {}): CardCollectResponse => {
@@ -217,26 +215,14 @@ const handleCardCollectV1 = ({
 			return Promise.reject(errors);
 		}
 
-		if (handleCardValuesOnSubmit) {
-			return Promise.resolve({
-				status: 200,
-				data: {
-					holderValue: holderValue || '',
-					cardValue: cardValue || '',
-					dateValue: dateValue || '',
-					cvvValue: cvvValue || ''
-				}
-			});
-		}
-
-		return handleFetch({
-			url: `https://${PAYBYRD_TOKEN_URL}/api/v1/tokens`,
-			method: 'POST',
-			body: {
-				number: cardValue,
-				expiration: dateValue,
-				cvv: cvvValue,
-				holder: holderValue
+		// Returns all card data so it can be used by the client to finish the payment
+		return Promise.resolve({
+			status: 200,
+			data: {
+				holderValue: holderValue || '',
+				cardValue: cardValue || '',
+				dateValue: dateValue || '',
+				cvvValue: cvvValue || ''
 			}
 		});
 	};

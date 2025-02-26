@@ -17,7 +17,6 @@ export type CardCollectProps = {
 	onFieldChange?: ({ fieldId, element, error, value, isValid }: FieldChangeProps) => void;
 	validateOnChange?: boolean;
 	displayHelpIcons?: boolean;
-	handleCardValuesOnSubmit?: boolean;
 	i18nMessages?: Record<i18nMessagesTypes, string>;
 	onCardCollectFrameLoaded?: () => void;
 };

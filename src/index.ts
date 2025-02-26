@@ -9,7 +9,6 @@ export default async ({
 	onFieldChange = () => {},
 	validateOnChange = true,
 	displayHelpIcons,
-	handleCardValuesOnSubmit,
 	i18nMessages,
 	onCardCollectFrameLoaded
 }: CardCollectProps = {}): Promise<CardCollectResponse> => {
@@ -19,7 +18,6 @@ export default async ({
 		onFieldChange,
 		validateOnChange,
 		displayHelpIcons,
-		handleCardValuesOnSubmit,
 		i18nMessages,
 		onCardCollectFrameLoaded
 	});

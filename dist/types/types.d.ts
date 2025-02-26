@@ -11,9 +11,8 @@ export type CardCollectProps = {
     onFieldChange?: ({ fieldId, element, error, value, isValid }: FieldChangeProps) => void;
     validateOnChange?: boolean;
     displayHelpIcons?: boolean;
-    handleCardValuesOnSubmit?: boolean;
     i18nMessages?: Record<i18nMessagesTypes, string>;
-    version?: number;
+    onCardCollectFrameLoaded?: () => void;
 };
 export type SubmitBody = {
     number?: string;
@@ -21,19 +20,25 @@ export type SubmitBody = {
     cvv?: string;
     holder?: string;
 };
+export type FetchProps = {
+    url: string;
+    body?: SubmitBody;
+    method?: string;
+};
+export type FetchResponse = {
+    status: number;
+    data: Record<string, string>;
+};
 export type CardCollectResponse = {
-    cardCollect_submit: () => Promise<{
-        status: string;
-        data: Record<string, string>;
-    }>;
+    cardCollect_submit: () => Promise<FetchResponse>;
 };
 export type GenerateFieldProps = {
     type?: string;
     wrapper: HTMLElement;
     maxLength?: number;
-    id: string;
+    id?: string;
     validationType?: string;
-    customHandleChange: (value: string) => void;
+    customHandleChange?: (value: string) => void;
     inputAddornment?: string;
     eventType?: 'keydown' | 'keyup' | 'input';
 };
@@ -54,7 +59,7 @@ export type ErrorData = {
     message: string;
 };
 export type GenerateErrorProps = {
-    field: HTMLElement;
+    field?: HTMLElement | null;
     displayErrors?: boolean;
     errorData: Record<string, string>;
 };

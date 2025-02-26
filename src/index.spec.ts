@@ -105,31 +105,14 @@ describe('CardCollect', () => {
 		const cvv: HTMLInputElement = cvvMock.getElementsByTagName('input')[0] as HTMLInputElement;
 		cvv.value = '123';
 
-		const responseMock = {
-			tokenId: '123',
-			correlationId: '345'
-		};
-		fetchMock.mockResponseOnce(JSON.stringify(responseMock));
-
 		const response = await cardCollect_submit();
 
 		expect(response.status).toBe(200);
 		expect(response.data).toMatchObject({
-			tokenId: '123',
-			correlationId: '345'
+			holderValue: 'Paybyrd',
+			cardValue: '5555341244441115',
+			dateValue: '01/30',
+			cvvValue: '123'
 		});
-		expect(fetchMock).toHaveBeenCalledWith(
-			`https://${PAYBYRD_TOKEN_URL}/api/v1/tokens`,
-			expect.objectContaining({
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'x-functions-key': PAYBYRD_CODE_KEY
-				},
-				body: expect.stringContaining(
-					'{"number":"5555341244441115","expiration":"01/30","cvv":"123","holder":"Paybyrd"}'
-				)
-			})
-		);
 	});
 });
