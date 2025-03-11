@@ -1,4 +1,4 @@
-import { InputChangeProps, GenerateFieldProps, GenerateIFrameFieldProps } from '../types/types';
+import { InputChangeProps, GenerateFieldProps } from '../types/types';
 
 import { regexOnlyNumbers } from './validations';
 
@@ -127,24 +127,4 @@ export const generateField = ({
 		addornmentWrapper.innerHTML = inputAddornment;
 		wrapper.append(addornmentWrapper);
 	}
-};
-
-export const generateIFrameField = ({
-	src,
-	placeholder,
-	wrapper,
-	id,
-	css
-}: GenerateIFrameFieldProps) => {
-	const iframeField = document.createElement('iframe');
-	iframeField.src = src;
-	iframeField.id = id || '';
-	iframeField.classList.add('pb-secure-field');
-	iframeField.style.border = '0';
-	iframeField.style.width = '100%';
-	iframeField.style.height = '100%';
-
-	wrapper.append(iframeField);
-
-	iframeField.contentWindow?.postMessage({ type: 'PB_PCI_METADATA', data: { placeholder, css } });
 };

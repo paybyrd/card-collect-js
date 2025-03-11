@@ -15,7 +15,7 @@ export default async ({
 	onCardCollectFrameLoaded
 }: CardCollectProps = {}): Promise<CardCollectResponse> => {
 	if (version === 2) {
-		return handleCardCollectV2({ onCardCollectFrameLoaded });
+		return handleCardCollectV2({ onCardCollectFrameLoaded, i18nMessages, displayErrors });
 	}
 
 	// Handle default card collect using html template

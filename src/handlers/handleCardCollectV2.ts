@@ -1,22 +1,60 @@
 import {
 	CardCollectProps,
 	CardCollectResponse,
+	GenerateIFrameFieldProps,
 	IFrameValuesPostMessageResponse
 } from '../types/types';
-
-import { generateIFrameField } from '../utils/init';
+import { validateFields, generateError } from '../utils/validations';
 
 const handleCardCollectV2 = ({
-	// displayErrors,
-	onCardCollectFrameLoaded
-}: // i18nMessages
-CardCollectProps = {}): CardCollectResponse => {
+	onCardCollectFrameLoaded,
+	i18nMessages,
+	displayErrors
+}: CardCollectProps = {}): CardCollectResponse => {
 	const cHolder = document.getElementById('cc-holder');
 	const cNumber = document.getElementById('cc-number');
 	const cExpDate = document.getElementById('cc-expiration-date');
 	const cCVV = document.getElementById('cc-cvc');
-	// const allFields = [cHolder, cNumber, cExpDate, cCVV];
-	// let isDirty = false;
+
+	const fieldsToLoad = [
+		cHolder ? 'cHolder' : null,
+		cNumber ? 'cNumber' : null,
+		cExpDate ? 'cExpDate' : null,
+		cCVV ? 'cCVV' : null
+	].filter(Boolean).length;
+
+	let loadedFields = 0;
+
+	const generateIFrameField = ({
+		src,
+		placeholder,
+		wrapper,
+		id,
+		css
+	}: GenerateIFrameFieldProps) => {
+		const iframeField = document.createElement('iframe');
+		iframeField.src = src;
+		iframeField.id = id || '';
+		iframeField.classList.add('pb-secure-field');
+		iframeField.style.border = '0';
+		iframeField.style.width = '100%';
+		iframeField.style.height = '100%';
+
+		wrapper.append(iframeField);
+
+		iframeField.onload = () => {
+			loadedFields++;
+
+			iframeField.contentWindow?.postMessage(
+				{ type: 'PB_PCI_METADATA', data: { placeholder, css } },
+				'*'
+			);
+
+			if (loadedFields === fieldsToLoad) {
+				onCardCollectFrameLoaded?.();
+			}
+		};
+	};
 
 	// Generate fields in DOM
 	if (cHolder) {
@@ -78,7 +116,25 @@ CardCollectProps = {}): CardCollectResponse => {
 		return fieldData;
 	};
 
+	const clearIFrameErrors = () => {
+		const iframes = document.querySelectorAll('.pb-secure-field');
+
+		for (const iframe of Array.from(iframes)) {
+			(iframe as HTMLIFrameElement).contentWindow?.postMessage(
+				{ type: 'PB_PCI_CLEAR_ERROR' },
+				'*'
+			);
+		}
+	};
+
+	const generateIFrameErrors = (field: HTMLElement, errorData: Record<string, string>) => {
+		field
+			.querySelector('iframe')
+			?.contentWindow?.postMessage({ type: 'PB_PCI_FIELD_ERROR', data: { errorData } }, '*');
+	};
+
 	const submit = async () => {
+		clearIFrameErrors();
 		const { cardHolder, cardNumber, cvv, expDate } = await getIFrameValues();
 		let normalizedExpDate = expDate;
 
@@ -87,32 +143,34 @@ CardCollectProps = {}): CardCollectResponse => {
 			normalizedExpDate = `${formattedDate.slice(0, 2)}/${formattedDate.slice(2)}`;
 		}
 
-		// const { isValid, errors } = validateFields({
-		// 	holderValue,
-		// 	cardValue,
-		// 	dateValue,
-		// 	cvvValue,
-		// 	i18nMessages
-		// });
+		const { isValid, errors } = validateFields({
+			holderValue: cardHolder,
+			cardValue: cardNumber,
+			dateValue: expDate,
+			cvvValue: cvv,
+			i18nMessages
+		});
 
-		// if (!isValid) {
-		// 	isDirty = true;
+		if (!isValid) {
+			Object.entries(errors).map((error) => {
+				const field = document.getElementById(error[0]);
+				const errorData = error[1];
 
-		// 	Object.entries(errors).map((error) => {
-		// 		const field = document.getElementById(error[0]);
-		// 		const errorData = error[1];
+				if (field) {
+					generateError({
+						field,
+						displayErrors,
+						errorData
+					});
 
-		// 		if (field) {
-		// 			generateError({
-		// 				field,
-		// 				displayErrors,
-		// 				errorData
-		// 			});
-		// 		}
-		// 	});
+					console.log(errorData);
 
-		// 	return Promise.reject(errors);
-		// }
+					generateIFrameErrors(field, errorData);
+				}
+			});
+
+			return Promise.reject(errors);
+		}
 
 		// Returns all card data so it can be used by the client to finish the payment
 		return Promise.resolve({
@@ -125,8 +183,6 @@ CardCollectProps = {}): CardCollectResponse => {
 			}
 		});
 	};
-
-	onCardCollectFrameLoaded?.();
 
 	return { cardCollect_submit: submit };
 };
