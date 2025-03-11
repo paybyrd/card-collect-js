@@ -19,6 +19,14 @@ export type CardCollectProps = {
 	displayHelpIcons?: boolean;
 	i18nMessages?: Record<i18nMessagesTypes, string>;
 	onCardCollectFrameLoaded?: () => void;
+	version?: number;
+};
+
+export type IFrameValuesPostMessageResponse = {
+	cardHolder?: string;
+	cardNumber?: string;
+	expDate?: string;
+	cvv?: string;
 };
 
 export type SubmitBody = {
@@ -51,6 +59,14 @@ export type GenerateFieldProps = {
 	customHandleChange?: (value: string) => void;
 	inputAddornment?: string;
 	eventType?: 'keydown' | 'keyup' | 'input';
+};
+
+export type GenerateIFrameFieldProps = {
+	wrapper: HTMLElement;
+	id?: string;
+	src: string;
+	placeholder?: string;
+	css?: string;
 };
 
 export type InputChangeProps = {
