@@ -10,7 +10,11 @@ type i18nMessagesTypes =
 	| 'requiredField'
 	| 'invalidCardNumber'
 	| 'invalidExpirationDate'
-	| 'invalidCVV';
+	| 'invalidCVV'
+	| 'holderName'
+	| 'cvv'
+	| 'expDate'
+	| 'cardNumber';
 
 export type CardCollectProps = {
 	displayErrors?: boolean;
@@ -20,6 +24,8 @@ export type CardCollectProps = {
 	i18nMessages?: Record<i18nMessagesTypes, string>;
 	onCardCollectFrameLoaded?: () => void;
 	version?: number;
+	css?: string;
+	validateOnFrame?: boolean;
 };
 
 export type IFrameValuesPostMessageResponse = {
@@ -48,6 +54,7 @@ export type FetchResponse = {
 
 export type CardCollectResponse = {
 	cardCollect_submit: () => Promise<FetchResponse>;
+	destroy?: () => void;
 };
 
 export type GenerateFieldProps = {

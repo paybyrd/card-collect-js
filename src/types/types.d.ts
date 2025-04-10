@@ -25,6 +25,7 @@ export type FetchResponse = {
 
 export type CardCollectResponse = {
 	cardCollect_submit: () => Promise<FetchResponse>;
+	destroy?: () => void;
 };
 export type GenerateFieldProps = {
 	type?: string;

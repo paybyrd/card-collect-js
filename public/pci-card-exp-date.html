@@ -31,10 +31,14 @@
             if (event.data.type === 'PB_PCI_METADATA') {
                 inputField.placeholder = event.data.data.placeholder;
 
-                if (event.data.css) {
+                if (event.data.data.css) {
                     const cssData = document.createElement('style');
-                    // TODO Sanitize field to avoid XSS
-                    cssData.innerHTML = event.data.css;
+                    const sanitizedCSS = event.data.data.css.replace(/<\/?script[^>]*>/gi, "").replace(/<\/?style[^>]*>/gi, "");
+
+                    cssData.type = "text/css";
+                    cssData.innerHTML = sanitizedCSS;
+
+                    document.head.appendChild(cssData);
                 }
             }
 

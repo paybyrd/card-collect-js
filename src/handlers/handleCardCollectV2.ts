@@ -6,15 +6,32 @@ import {
 } from '../types/types';
 import { validateFields, generateError } from '../utils/validations';
 
+const PBI_FIELDS_BASE_PATH = 'https://ambitious-forest-051c39f03.6.azurestaticapps.net';
+
 const handleCardCollectV2 = ({
 	onCardCollectFrameLoaded,
+	onFieldChange,
+	validateOnFrame,
 	i18nMessages,
-	displayErrors
+	displayErrors,
+	css
 }: CardCollectProps = {}): CardCollectResponse => {
 	const cHolder = document.getElementById('cc-holder');
 	const cNumber = document.getElementById('cc-number');
 	const cExpDate = document.getElementById('cc-expiration-date');
 	const cCVV = document.getElementById('cc-cvc');
+
+	const handleMessage = (event: MessageEvent) => {
+		if (event.data.type === 'PB_PCI_FIELD_CHANGE') {
+			onFieldChange?.(event.data);
+		}
+	};
+
+	window.addEventListener('message', handleMessage);
+
+	const destroy = () => {
+		window.removeEventListener('message', handleMessage);
+	};
 
 	const fieldsToLoad = [
 		cHolder ? 'cHolder' : null,
@@ -59,34 +76,34 @@ const handleCardCollectV2 = ({
 	// Generate fields in DOM
 	if (cHolder) {
 		generateIFrameField({
-			src: 'pci-card-holder.html',
-			placeholder: 'Card Holder',
+			src: `${PBI_FIELDS_BASE_PATH}/pci-card-holder.html`,
+			placeholder: i18nMessages?.holderName || 'Card Holder',
 			wrapper: cHolder,
-			css: 'body: { background: red }'
+			css
 		});
 	}
 	if (cNumber) {
 		generateIFrameField({
-			src: 'pci-card-number.html',
-			placeholder: 'Card Number',
+			src: `${PBI_FIELDS_BASE_PATH}/pci-card-number.html`,
+			placeholder: i18nMessages?.cardNumber || 'Card Number',
 			wrapper: cNumber,
-			css: 'body: { background: green }'
+			css
 		});
 	}
 	if (cExpDate) {
 		generateIFrameField({
-			src: 'pci-card-exp-date.html',
-			placeholder: 'MM/YY',
+			src: `${PBI_FIELDS_BASE_PATH}/pci-card-exp-date.html`,
+			placeholder: i18nMessages?.expDate || 'MM/YY',
 			wrapper: cExpDate,
-			css: 'body: { background: yellow }'
+			css
 		});
 	}
 	if (cCVV) {
 		generateIFrameField({
-			src: 'pci-card-cvv.html',
-			placeholder: 'CVV',
+			src: `${PBI_FIELDS_BASE_PATH}/pci-card-cvv.html`,
+			placeholder: i18nMessages?.cvv || 'CVV',
 			wrapper: cCVV,
-			css: 'body: { background: green }'
+			css
 		});
 	}
 
@@ -127,10 +144,17 @@ const handleCardCollectV2 = ({
 		}
 	};
 
-	const generateIFrameErrors = (field: HTMLElement, errorData: Record<string, string>) => {
+	const generateIFrameErrors = (
+		field: HTMLElement,
+		errorData: Record<string, string>,
+		validateOnFrame?: boolean
+	) => {
 		field
 			.querySelector('iframe')
-			?.contentWindow?.postMessage({ type: 'PB_PCI_FIELD_ERROR', data: { errorData } }, '*');
+			?.contentWindow?.postMessage(
+				{ type: 'PB_PCI_FIELD_ERROR', data: { errorData, validateOnFrame } },
+				'*'
+			);
 	};
 
 	const submit = async () => {
@@ -163,9 +187,7 @@ const handleCardCollectV2 = ({
 						errorData
 					});
 
-					console.log(errorData);
-
-					generateIFrameErrors(field, errorData);
+					generateIFrameErrors(field, errorData, validateOnFrame);
 				}
 			});
 
@@ -184,7 +206,7 @@ const handleCardCollectV2 = ({
 		});
 	};
 
-	return { cardCollect_submit: submit };
+	return { cardCollect_submit: submit, destroy };
 };
 
 export default handleCardCollectV2;

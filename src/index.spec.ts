@@ -1,7 +1,7 @@
 import cardCollect from './index';
 import fetchMock from 'jest-fetch-mock';
 
-describe('CardCollect', () => {
+describe('CardCollect - V1 (HTML inputs)', () => {
 	let holderNameMock: HTMLElement;
 	let cardNumberMock: HTMLElement;
 	let expiryDateMock: HTMLElement;
@@ -12,6 +12,8 @@ describe('CardCollect', () => {
 	});
 
 	beforeEach(() => {
+		document.body.innerHTML = '';
+
 		fetchMock.resetMocks();
 		fetchMock.doMock();
 		jest.clearAllMocks();
@@ -37,74 +39,80 @@ describe('CardCollect', () => {
 		});
 	});
 
-	it('cardCollect function should be defined', () => {
+	it('should define the cardCollect function', () => {
 		expect(cardCollect).toBeDefined();
 	});
 
-	it('When call cardCollect function should return a submit function', async () => {
-		const { cardCollect_submit } = await cardCollect({});
-
+	it('should return submit function (v1)', async () => {
+		const { cardCollect_submit } = await cardCollect({ version: 1 });
 		expect(cardCollect_submit).toBeDefined();
 	});
 
-	it('When call cardCollect function should configure holder input', async () => {
+	it('should configure holder input (v1)', async () => {
 		const appendSpy = jest.spyOn(holderNameMock, 'append');
 		const classListSpy = jest.spyOn(holderNameMock.classList, 'add');
 
-		await cardCollect({});
+		await cardCollect({ version: 1 });
 
 		expect(appendSpy).toHaveBeenCalledWith(expect.any(HTMLElement));
 		expect(classListSpy).toHaveBeenCalledWith('form-field');
 	});
 
-	it('When call cardCollect function should configure card number input', async () => {
+	it('should configure card number input (v1)', async () => {
 		const appendSpy = jest.spyOn(cardNumberMock, 'append');
 		const classListSpy = jest.spyOn(cardNumberMock.classList, 'add');
 
-		await cardCollect({});
+		await cardCollect({ version: 1 });
 
 		expect(appendSpy).toHaveBeenCalledWith(expect.any(HTMLElement));
 		expect(classListSpy).toHaveBeenCalledWith('form-field');
 	});
 
-	it('When call cardCollect function should configure cvv input', async () => {
+	it('should configure CVV input (v1)', async () => {
 		const appendSpy = jest.spyOn(cvvMock, 'append');
 		const classListSpy = jest.spyOn(cvvMock.classList, 'add');
 
-		await cardCollect({});
+		await cardCollect({ version: 1 });
 
 		expect(appendSpy).toHaveBeenCalledWith(expect.any(HTMLElement));
 		expect(classListSpy).toHaveBeenCalledWith('form-field');
 	});
 
-	it('When call cardCollect function should configure expiry date input', async () => {
+	it('should configure expiry date input (v1)', async () => {
 		const appendSpy = jest.spyOn(expiryDateMock, 'append');
 		const classListSpy = jest.spyOn(expiryDateMock.classList, 'add');
 
-		await cardCollect({});
+		await cardCollect({ version: 1 });
 
 		expect(appendSpy).toHaveBeenCalledWith(expect.any(HTMLElement));
 		expect(classListSpy).toHaveBeenCalledWith('form-field');
 	});
 
-	it('When call cardCollect submit should fix expiration date value', async () => {
-		const { cardCollect_submit } = await cardCollect();
+	it('should fix expiry date format on submit (v1)', async () => {
+		await cardCollect({ version: 1 });
 
-		const holder: HTMLInputElement = holderNameMock.getElementsByTagName(
-			'input'
-		)[0] as HTMLInputElement;
-		holder.value = 'Paybyrd';
-		const cardNumber: HTMLInputElement = cardNumberMock.getElementsByTagName(
-			'input'
-		)[0] as HTMLInputElement;
-		cardNumber.value = '5555341244441115';
-		const expiryDate: HTMLInputElement = expiryDateMock.getElementsByTagName(
-			'input'
-		)[0] as HTMLInputElement;
-		expiryDate.value = '130';
-		const cvv: HTMLInputElement = cvvMock.getElementsByTagName('input')[0] as HTMLInputElement;
-		cvv.value = '123';
+		const holderInput = document.createElement('input');
+		holderInput.value = 'Paybyrd';
+		holderInput.id = 'cc-holder';
+		holderNameMock.appendChild(holderInput);
 
+		// E assim por diante nos outros:
+		const cardNumberInput = document.createElement('input');
+		cardNumberInput.value = '5555341244441115';
+		cardNumberInput.id = 'cc-number';
+		cardNumberMock.appendChild(cardNumberInput);
+
+		const expiryDateInput = document.createElement('input');
+		expiryDateInput.value = '130';
+		expiryDateInput.id = 'cc-exp-date';
+		expiryDateMock.appendChild(expiryDateInput);
+
+		const cvvInput = document.createElement('input');
+		cvvInput.value = '123';
+		cvvInput.id = 'cc-cvv';
+		cvvMock.appendChild(cvvInput);
+
+		const { cardCollect_submit } = await cardCollect({ version: 1 });
 		const response = await cardCollect_submit();
 
 		expect(response.status).toBe(200);

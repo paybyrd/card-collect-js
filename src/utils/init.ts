@@ -93,7 +93,8 @@ export const generateField = ({
 	inputAddornment
 }: GenerateFieldProps) => {
 	if (id) {
-		if (document.getElementById(id)) return;
+		const existing = wrapper.querySelector(`#${id}`);
+		if (existing) wrapper.removeChild(existing);
 
 		const fieldInput = document.createElement('input');
 		fieldInput.id = id;

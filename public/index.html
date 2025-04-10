@@ -5,22 +5,13 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
 	<title>Paybyrd card collect</title>
-	<style>
-		div.myfield {
-			height: 60px;
-		}
-
-		div.myfield>input {
-			background: purple;
-		}
-	</style>
 	<script defer="defer" src="cardCollect-web.js"></script>
 </head>
 
 <body>
 	<div id="loader">Loading...</div>
 	<div id="cardCollect" style="display: none">
-		<div id="cc-holder" class="form-field myfield" data-placeholder="Card Holder"></div>
+		<div id="cc-holder" class="form-field" data-placeholder="Card Holder"></div>
 		<div id="cc-number" class="form-field" data-placeholder="Card Number"></div>
 		<div class="form-field-group">
 			<div id="cc-expiration-date" class="form-field" data-placeholder="MM/YY"></div>
@@ -57,6 +48,7 @@
 				onFieldChange: handleFieldChange,
 				displayHelpIcons: true,
 				onCardCollectFrameLoaded: handleCardCollectFrameLoaded,
+				css: `input { background: red; }`,
 			});
 
 			// Form setup
