@@ -13,6 +13,9 @@ export default async ({
 	i18nMessages,
 	version = 2,
 	onCardCollectFrameLoaded,
+	onDCCData,
+	pciFieldsBasePath,
+	dccUrl,
 	css,
 	validateOnFrame = true
 }: CardCollectProps = {}): Promise<CardCollectResponse> => {
@@ -20,6 +23,9 @@ export default async ({
 		return handleCardCollectV2({
 			onCardCollectFrameLoaded,
 			onFieldChange,
+			onDCCData,
+			pciFieldsBasePath,
+			dccUrl,
 			i18nMessages,
 			displayErrors,
 			css,

@@ -6,11 +6,12 @@ import {
 } from '../types/types';
 import { validateFields, generateError } from '../utils/validations';
 
-const PBI_FIELDS_BASE_PATH = 'https://ambitious-forest-051c39f03.6.azurestaticapps.net';
-
 const handleCardCollectV2 = ({
 	onCardCollectFrameLoaded,
 	onFieldChange,
+	onDCCData,
+	pciFieldsBasePath,
+	dccUrl,
 	validateOnFrame,
 	i18nMessages,
 	displayErrors,
@@ -24,6 +25,10 @@ const handleCardCollectV2 = ({
 	const handleMessage = (event: MessageEvent) => {
 		if (event.data.type === 'PB_PCI_FIELD_CHANGE') {
 			onFieldChange?.(event.data);
+		}
+
+		if (event.data.type === 'PB_PCI_DCC_DATA') {
+			onDCCData?.(event.data);
 		}
 	};
 
@@ -63,7 +68,7 @@ const handleCardCollectV2 = ({
 			loadedFields++;
 
 			iframeField.contentWindow?.postMessage(
-				{ type: 'PB_PCI_METADATA', data: { placeholder, css } },
+				{ type: 'PB_PCI_METADATA', data: { placeholder, css, dccUrl } },
 				'*'
 			);
 
@@ -76,7 +81,8 @@ const handleCardCollectV2 = ({
 	// Generate fields in DOM
 	if (cHolder) {
 		generateIFrameField({
-			src: `${PBI_FIELDS_BASE_PATH}/pci-card-holder.html`,
+			id: 'cc-holder',
+			src: `${pciFieldsBasePath}/pci-card-holder.html`,
 			placeholder: i18nMessages?.holderName || 'Card Holder',
 			wrapper: cHolder,
 			css
@@ -84,7 +90,8 @@ const handleCardCollectV2 = ({
 	}
 	if (cNumber) {
 		generateIFrameField({
-			src: `${PBI_FIELDS_BASE_PATH}/pci-card-number.html`,
+			id: 'cc-number',
+			src: `${pciFieldsBasePath}/pci-card-number.html`,
 			placeholder: i18nMessages?.cardNumber || 'Card Number',
 			wrapper: cNumber,
 			css
@@ -92,7 +99,8 @@ const handleCardCollectV2 = ({
 	}
 	if (cExpDate) {
 		generateIFrameField({
-			src: `${PBI_FIELDS_BASE_PATH}/pci-card-exp-date.html`,
+			id: 'cc-expiration-date',
+			src: `${pciFieldsBasePath}/pci-card-exp-date.html`,
 			placeholder: i18nMessages?.expDate || 'MM/YY',
 			wrapper: cExpDate,
 			css
@@ -100,7 +108,8 @@ const handleCardCollectV2 = ({
 	}
 	if (cCVV) {
 		generateIFrameField({
-			src: `${PBI_FIELDS_BASE_PATH}/pci-card-cvv.html`,
+			id: 'cc-cvc',
+			src: `${pciFieldsBasePath}/pci-card-cvv.html`,
 			placeholder: i18nMessages?.cvv || 'CVV',
 			wrapper: cCVV,
 			css
@@ -122,7 +131,10 @@ const handleCardCollectV2 = ({
 				};
 
 				window.addEventListener('message', messageListener);
-				iframe.contentWindow?.postMessage({ type: 'PB_PCI_GET_VALUES' }, '*');
+				iframe.contentWindow?.postMessage(
+					{ type: 'PB_PCI_GET_VALUES', data: { id: iframe.id } },
+					'*'
+				);
 			});
 		}
 
@@ -159,8 +171,8 @@ const handleCardCollectV2 = ({
 
 	const submit = async () => {
 		clearIFrameErrors();
-		const { cardHolder, cardNumber, cvv, expDate } = await getIFrameValues();
-		let normalizedExpDate = expDate;
+		const fields = await getIFrameValues();
+		let normalizedExpDate = fields['cc-expiration-date'];
 
 		if (normalizedExpDate && /^\d{3,4}$/.test(normalizedExpDate)) {
 			const formattedDate = normalizedExpDate.padStart(4, '0');
@@ -168,10 +180,10 @@ const handleCardCollectV2 = ({
 		}
 
 		const { isValid, errors } = validateFields({
-			holderValue: cardHolder,
-			cardValue: cardNumber,
-			dateValue: expDate,
-			cvvValue: cvv,
+			holderValue: fields['cc-holder'],
+			cardValue: fields['cc-number'],
+			dateValue: fields['cc-expiration-date'],
+			cvvValue: fields['cc-cvc'],
 			i18nMessages
 		});
 
@@ -198,10 +210,10 @@ const handleCardCollectV2 = ({
 		return Promise.resolve({
 			status: 200,
 			data: {
-				holderValue: cardHolder || '',
-				cardValue: cardNumber || '',
-				dateValue: expDate || '',
-				cvvValue: cvv || ''
+				holderValue: fields['cc-holder'] || '',
+				cardValue: fields['cc-number'] || '',
+				dateValue: fields['cc-expiration-date'] || '',
+				cvvValue: fields['cc-cvc'] || ''
 			}
 		});
 	};

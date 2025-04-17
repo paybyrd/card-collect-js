@@ -23,16 +23,19 @@ export type CardCollectProps = {
 	displayHelpIcons?: boolean;
 	i18nMessages?: Record<i18nMessagesTypes, string>;
 	onCardCollectFrameLoaded?: () => void;
+	onDCCData?: (dccData: unknown) => void;
+	pciFieldsBasePath?: string;
+	dccUrl?: string;
 	version?: number;
 	css?: string;
 	validateOnFrame?: boolean;
 };
 
 export type IFrameValuesPostMessageResponse = {
-	cardHolder?: string;
-	cardNumber?: string;
-	expDate?: string;
-	cvv?: string;
+	'cc-holder'?: string;
+	'cc-number'?: string;
+	'cc-expiration-date'?: string;
+	'cc-cvc'?: string;
 };
 
 export type SubmitBody = {
