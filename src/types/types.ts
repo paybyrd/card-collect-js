@@ -10,7 +10,11 @@ type i18nMessagesTypes =
 	| 'requiredField'
 	| 'invalidCardNumber'
 	| 'invalidExpirationDate'
-	| 'invalidCVV';
+	| 'invalidCVV'
+	| 'holderName'
+	| 'cvv'
+	| 'expDate'
+	| 'cardNumber';
 
 export type CardCollectProps = {
 	displayErrors?: boolean;
@@ -19,6 +23,19 @@ export type CardCollectProps = {
 	displayHelpIcons?: boolean;
 	i18nMessages?: Record<i18nMessagesTypes, string>;
 	onCardCollectFrameLoaded?: () => void;
+	onDCCData?: (dccData: unknown) => void;
+	pciFieldsBasePath?: string;
+	dccUrl?: string;
+	version?: number;
+	css?: string;
+	validateOnFrame?: boolean;
+};
+
+export type IFrameValuesPostMessageResponse = {
+	'cc-holder'?: string;
+	'cc-number'?: string;
+	'cc-expiration-date'?: string;
+	'cc-cvc'?: string;
 };
 
 export type SubmitBody = {
@@ -40,6 +57,7 @@ export type FetchResponse = {
 
 export type CardCollectResponse = {
 	cardCollect_submit: () => Promise<FetchResponse>;
+	destroy?: () => void;
 };
 
 export type GenerateFieldProps = {
@@ -51,6 +69,14 @@ export type GenerateFieldProps = {
 	customHandleChange?: (value: string) => void;
 	inputAddornment?: string;
 	eventType?: 'keydown' | 'keyup' | 'input';
+};
+
+export type GenerateIFrameFieldProps = {
+	wrapper: HTMLElement;
+	id?: string;
+	src: string;
+	placeholder?: string;
+	css?: string;
 };
 
 export type InputChangeProps = {
