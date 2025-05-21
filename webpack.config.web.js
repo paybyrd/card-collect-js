@@ -1,5 +1,4 @@
 const path = require('path');
-const webpack = require('webpack');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -53,10 +52,6 @@ module.exports = () => {
 		plugins: [
 			new HtmlWebpackPlugin({
 				template: './public/index.html'
-			}),
-			new webpack.DefinePlugin({
-				PAYBYRD_TOKEN_URL: JSON.stringify(process.env.PAYBYRD_TOKEN_URL),
-				PAYBYRD_CODE_KEY: JSON.stringify(process.env.PAYBYRD_CODE_KEY)
 			}),
 			new ESLintPlugin({
 				files: 'src/**/*.ts'

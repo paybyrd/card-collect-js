@@ -1,3 +1,4 @@
+import { getTokensAPIURL } from '../service/api';
 import { post } from '../service/api';
 import {
 	CardCollectProps,
@@ -16,8 +17,11 @@ const handleCardCollectV2 = ({
 	validateOnFrame,
 	i18nMessages,
 	displayErrors,
-	css
+	css,
+	env = 'production'
 }: CardCollectProps = {}): CardCollectResponse => {
+	const PAYBYRD_API_TOKEN_URL = getTokensAPIURL(env);
+
 	const cHolder = document.getElementById('cc-holder');
 	const cNumber = document.getElementById('cc-number');
 	const cExpDate = document.getElementById('cc-expiration-date');
@@ -208,7 +212,7 @@ const handleCardCollectV2 = ({
 		}
 
 		// Returns tokenized card data to fetch /payment
-		return post(`${PAYBYRD_TOKEN_URL}/api/v1/tokens`, {
+		return post(`${PAYBYRD_API_TOKEN_URL}/api/v1/tokens`, {
 			holder: fields['cc-holder'] || '',
 			number: fields['cc-number'] ? fields['cc-number'].replace(/ /g, '') : '',
 			expiration: fields['cc-expiration-date'] || '',

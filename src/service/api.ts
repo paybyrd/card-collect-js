@@ -1,3 +1,5 @@
+import { ENV } from '../types/types';
+
 interface SubmitBody {
 	number?: string;
 	expiration?: string;
@@ -11,12 +13,13 @@ interface FetchRequest {
 	body: SubmitBody;
 }
 
+export const getTokensAPIURL = (env: ENV) => {
+	return `https://token${env === 'stage' ? 'sandbox' : ''}.paybyrd.com`;
+};
+
 const handleFetch = ({ url, method, body }: FetchRequest) => {
 	return fetch(url, {
 		method,
-		headers: {
-			'x-functions-key': PAYBYRD_CODE_KEY
-		},
 		...(body && { body: JSON.stringify(body) })
 	})
 		.then((response) => response.json())

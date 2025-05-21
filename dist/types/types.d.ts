@@ -6,6 +6,7 @@ type FieldChangeProps = {
     isValid: boolean;
 };
 type i18nMessagesTypes = 'requiredField' | 'invalidCardNumber' | 'invalidExpirationDate' | 'invalidCVV' | 'holderName' | 'cvv' | 'expDate' | 'cardNumber';
+export type ENV = 'stage' | 'production';
 export type CardCollectProps = {
     displayErrors?: boolean;
     onFieldChange?: ({ fieldId, element, error, value, isValid }: FieldChangeProps) => void;
@@ -19,6 +20,7 @@ export type CardCollectProps = {
     version?: number;
     css?: string;
     validateOnFrame?: boolean;
+    env?: ENV;
 };
 export type IFrameValuesPostMessageResponse = {
     'cc-holder'?: string;

@@ -16,6 +16,8 @@ type i18nMessagesTypes =
 	| 'expDate'
 	| 'cardNumber';
 
+export type ENV = 'stage' | 'production';
+
 export type CardCollectProps = {
 	displayErrors?: boolean;
 	onFieldChange?: ({ fieldId, element, error, value, isValid }: FieldChangeProps) => void;
@@ -29,6 +31,7 @@ export type CardCollectProps = {
 	version?: number;
 	css?: string;
 	validateOnFrame?: boolean;
+	env?: ENV;
 };
 
 export type IFrameValuesPostMessageResponse = {
