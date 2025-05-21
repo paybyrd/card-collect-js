@@ -79,7 +79,6 @@ describe('CardCollect - V1 (HTML inputs)', () => {
 	});
 
 	it('should configure expiry date input (v1)', async () => {
-		ASDJASHDLOAS;
 		const appendSpy = jest.spyOn(expiryDateMock, 'append');
 		const classListSpy = jest.spyOn(expiryDateMock.classList, 'add');
 
