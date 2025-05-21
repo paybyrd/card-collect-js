@@ -1,3 +1,4 @@
+import { post } from '../service/api';
 import {
 	CardCollectProps,
 	CardCollectResponse,
@@ -206,15 +207,19 @@ const handleCardCollectV2 = ({
 			return Promise.reject(errors);
 		}
 
-		// Returns all card data so it can be used by the client to finish the payment
-		return Promise.resolve({
-			status: 200,
-			data: {
-				holderValue: fields['cc-holder'] || '',
-				cardValue: fields['cc-number'] || '',
-				dateValue: fields['cc-expiration-date'] || '',
-				cvvValue: fields['cc-cvc'] || ''
-			}
+		// Returns tokenized card data to fetch /payment
+		return post(`${PAYBYRD_TOKEN_URL}/api/v1/tokens`, {
+			holder: fields['cc-holder'] || '',
+			number: fields['cc-number'] ? fields['cc-number'].replace(/ /g, '') : '',
+			expiration: fields['cc-expiration-date'] || '',
+			cvv: fields['cc-cvc'] || ''
+		}).then((response) => {
+			console.log(response);
+
+			return {
+				status: 200,
+				data: response
+			};
 		});
 	};
 
