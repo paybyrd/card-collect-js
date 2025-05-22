@@ -17,7 +17,8 @@ export default async ({
 	pciFieldsBasePath,
 	dccUrl,
 	css,
-	validateOnFrame = true
+	validateOnFrame = true,
+	env = 'production'
 }: CardCollectProps = {}): Promise<CardCollectResponse> => {
 	if (version === 2) {
 		return handleCardCollectV2({
@@ -29,7 +30,8 @@ export default async ({
 			i18nMessages,
 			displayErrors,
 			css,
-			validateOnFrame
+			validateOnFrame,
+			env
 		});
 	}
 
