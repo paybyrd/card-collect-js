@@ -76,42 +76,65 @@ export const validateCreditCard = (cardnumber: string) => {
 	//  prefixes:     List of possible prefixes for the card
 	//  checkdigit:   Boolean to say whether there is a check digit
 	const cards = [];
-	cards[0] = { name: 'Visa', length: '13,16', prefixes: '4', checkdigit: true };
-	cards[1] = { name: 'MasterCard', length: '16', prefixes: '51,52,53,54,55', checkdigit: true };
-	cards[2] = { name: 'DinersClub', length: '14,16', prefixes: '36,38,54,55', checkdigit: true };
+	cards[0] = {
+		name: 'Elo',
+		length: '16',
+		prefixes:
+			'4011,4312,4389,4514,4573,5041,5066,5067,509,6277,6362,6363,6500,6504,6505,6507,6509,6516,6550',
+		checkdigit: true
+	};
+	cards[1] = { name: 'Visa', length: '13,16', prefixes: '4', checkdigit: true };
+	cards[2] = {
+		name: 'MasterCard',
+		length: '15,16',
+		prefixes: '22,23,24,25,26,27,51,52,53,54,55',
+		checkdigit: true
+	};
 	cards[3] = {
+		name: 'DinersClub',
+		length: '14,16',
+		prefixes: '36,38,39,54,55',
+		checkdigit: true
+	};
+	cards[4] = {
 		name: 'CarteBlanche',
 		length: '14',
 		prefixes: '300,301,302,303,304,305',
 		checkdigit: true
 	};
-	cards[4] = { name: 'AmEx', length: '15', prefixes: '34,37', checkdigit: true };
-	cards[5] = { name: 'Discover', length: '16', prefixes: '6011,622,64,65', checkdigit: true };
-	cards[6] = { name: 'JCB', length: '16', prefixes: '35', checkdigit: true };
-	cards[7] = { name: 'enRoute', length: '15', prefixes: '2014,2149', checkdigit: true };
-	cards[8] = { name: 'Solo', length: '16,18,19', prefixes: '6334,6767', checkdigit: true };
-	cards[9] = {
+	cards[5] = { name: 'AmEx', length: '15', prefixes: '34,37', checkdigit: true };
+	cards[6] = { name: 'Discover', length: '16', prefixes: '6011,622,64,65', checkdigit: true };
+	cards[7] = { name: 'JCB', length: '16,17,19', prefixes: '35', checkdigit: true };
+	cards[8] = { name: 'enRoute', length: '15', prefixes: '2014,2149', checkdigit: true };
+	cards[9] = { name: 'Solo', length: '16,18,19', prefixes: '6334,6767', checkdigit: true };
+	cards[10] = {
 		name: 'Switch',
 		length: '16,18,19',
 		prefixes: '4903,4905,4911,4936,564182,633110,6333,6759',
 		checkdigit: true
 	};
-	cards[10] = {
+	cards[11] = {
 		name: 'Maestro',
 		length: '12,13,14,15,16,18,19',
 		prefixes: '5018,5020,5038,6304,6759,6761,6762,6763',
 		checkdigit: true
 	};
-	cards[11] = {
+	cards[12] = {
 		name: 'VisaElectron',
 		length: '16',
 		prefixes: '4026,417500,4508,4844,4913,4917',
 		checkdigit: true
 	};
-	cards[12] = {
+	cards[13] = {
 		name: 'LaserCard',
 		length: '16,17,18,19',
 		prefixes: '6304,6706,6771,6709',
+		checkdigit: true
+	};
+	cards[14] = {
+		name: 'Hipercard',
+		length: '16',
+		prefixes: '384100,384140,384160,606282,637095,637599,637609,637612',
 		checkdigit: true
 	};
 
