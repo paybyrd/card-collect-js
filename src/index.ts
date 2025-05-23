@@ -14,7 +14,7 @@ export default async ({
 	version = 2,
 	onCardCollectFrameLoaded,
 	onDCCData,
-	pciFieldsBasePath,
+	pciFieldsBasePath = 'https://pci-components.paybyrd.com',
 	dccUrl,
 	css,
 	validateOnFrame = true,
