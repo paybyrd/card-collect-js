@@ -137,6 +137,12 @@ export const validateCreditCard = (cardnumber: string) => {
 		prefixes: '384100,384140,384160,606282,637095,637599,637609,637612',
 		checkdigit: true
 	};
+	cards[15] = {
+		name: 'UnionPay',
+		length: '16,17,18,19',
+		prefixes: '62,81,88',
+		checkdigit: true
+	};
 
 	// Ensure that the user has provided a credit card number
 	if (cardnumber.length == 0) {
