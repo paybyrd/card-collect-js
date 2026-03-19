@@ -10,6 +10,7 @@ type i18nMessagesTypes =
 	| 'requiredField'
 	| 'invalidCardNumber'
 	| 'invalidExpirationDate'
+	| 'expiredCard'
 	| 'invalidCVV'
 	| 'holderName'
 	| 'cvv'

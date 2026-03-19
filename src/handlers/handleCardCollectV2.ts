@@ -187,7 +187,7 @@ const handleCardCollectV2 = ({
 		const { isValid, errors } = validateFields({
 			holderValue: fields['cc-holder'],
 			cardValue: fields['cc-number'],
-			dateValue: fields['cc-expiration-date'],
+			dateValue: normalizedExpDate,
 			cvvValue: fields['cc-cvc'],
 			i18nMessages
 		});
