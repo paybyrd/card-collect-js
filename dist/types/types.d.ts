@@ -5,7 +5,7 @@ type FieldChangeProps = {
     value: string;
     isValid: boolean;
 };
-type i18nMessagesTypes = 'requiredField' | 'invalidCardNumber' | 'invalidExpirationDate' | 'invalidCVV' | 'holderName' | 'cvv' | 'expDate' | 'cardNumber';
+type i18nMessagesTypes = 'requiredField' | 'invalidCardNumber' | 'invalidExpirationDate' | 'expiredCard' | 'invalidCVV' | 'holderName' | 'cvv' | 'expDate' | 'cardNumber';
 export type ENV = 'stage' | 'production';
 export type CardCollectProps = {
     displayErrors?: boolean;

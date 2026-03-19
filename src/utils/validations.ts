@@ -56,6 +56,20 @@ export const validateFields = ({
 				type: 'invalidDate',
 				message: i18nMessages?.invalidExpirationDate || 'The expiration date must be valid'
 			};
+		} else {
+			const [month, year] = dateValue.split('/');
+			const expYear = year.length === 2 ? 2000 + parseInt(year) : parseInt(year);
+			const expMonth = parseInt(month);
+			const now = new Date();
+			const currentYear = now.getFullYear();
+			const currentMonth = now.getMonth() + 1;
+
+			if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
+				errors['cc-expiration-date'] = {
+					type: 'expiredCard',
+					message: i18nMessages?.expiredCard || 'The card has expired'
+				};
+			}
 		}
 	}
 
