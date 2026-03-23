@@ -5,7 +5,7 @@ export const regexOnlyNumbers = (value: string) => {
 	return value.replace(/[^0-9]/g, '');
 };
 
-const dateRegex = new RegExp(/\b(0[1-9]|1[0-2])\/([0-9]{4}|[0-9]{2})\b/);
+const dateFormatRegex = new RegExp(/^\d{2}\/\d{2}$/);
 const cvvRegex = new RegExp(/^[0-9]{3,4}$/);
 
 export const validateFields = ({
@@ -51,20 +51,25 @@ export const validateFields = ({
 				type: 'required',
 				message: i18nMessages?.requiredField || 'This field is required'
 			};
-		} else if (!dateRegex.test(dateValue)) {
+		} else if (!dateFormatRegex.test(dateValue)) {
 			errors['cc-expiration-date'] = {
 				type: 'invalidDate',
 				message: i18nMessages?.invalidExpirationDate || 'The expiration date must be valid'
 			};
 		} else {
 			const [month, year] = dateValue.split('/');
-			const expYear = year.length === 2 ? 2000 + parseInt(year) : parseInt(year);
 			const expMonth = parseInt(month);
+			const expYear = year.length === 2 ? 2000 + parseInt(year) : parseInt(year);
 			const now = new Date();
 			const currentYear = now.getFullYear();
 			const currentMonth = now.getMonth() + 1;
 
-			if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
+			if (expMonth < 1 || expMonth > 12) {
+				errors['cc-expiration-date'] = {
+					type: 'invalidDate',
+					message: i18nMessages?.invalidExpirationDate || 'The expiration date must be valid'
+				};
+			} else if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
 				errors['cc-expiration-date'] = {
 					type: 'expiredCard',
 					message: i18nMessages?.expiredCard || 'The card has expired'
