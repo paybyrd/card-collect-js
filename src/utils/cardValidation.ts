@@ -8,11 +8,7 @@ const validateCardNumber = (number: string) => {
 	//Check if the number contains only numeric value
 	//and is of between 13 to 19 digits
 	const regex = new RegExp('^[0-9]{13,19}$');
-	if (!regex.test(number)) {
-		return false;
-	}
-
-	return luhnCheck(number);
+	return regex.test(number);
 };
 
 const luhnCheck = (val: string) => {
@@ -141,7 +137,7 @@ export const validateCreditCard = (cardnumber: string) => {
 		name: 'UnionPay',
 		length: '16,17,18,19',
 		prefixes: '62,81,88',
-		checkdigit: true
+		checkdigit: false
 	};
 
 	// Ensure that the user has provided a credit card number
@@ -154,7 +150,6 @@ export const validateCreditCard = (cardnumber: string) => {
 	cardnumber = cardnumber.replace(/\s/g, '');
 
 	// Validate the format of the credit card
-	// luhn's algorithm
 	if (!validateCardNumber(cardnumber)) {
 		return response(false, ccErrors[2]);
 	}
@@ -192,6 +187,12 @@ export const validateCreditCard = (cardnumber: string) => {
 
 		if (lengthValid && prefixValid) {
 			cardCompany = cards[i].name;
+
+			// Apply Luhn check only for cards that require it
+			if (cards[i].checkdigit && !luhnCheck(cardnumber)) {
+				return response(false, ccErrors[2]);
+			}
+
 			return response(true, null, cardCompany);
 		}
 	}
