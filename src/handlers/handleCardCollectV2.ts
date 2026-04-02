@@ -218,8 +218,6 @@ const handleCardCollectV2 = ({
 			expiration: fields['cc-expiration-date'] || '',
 			cvv: fields['cc-cvc'] || ''
 		}).then((response) => {
-			console.log(response);
-
 			return {
 				status: 200,
 				data: response

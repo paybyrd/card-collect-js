@@ -11,6 +11,7 @@ import JCB from '../icons/JCBIcon.svg';
 import VPay from '../icons/VPayIcon.svg';
 import Visa from '../icons/VisaIcon.svg';
 import CreditCardPlaceholder from '../icons/CreditCardPlaceholder.svg';
+import UnionPay from '../icons/UnionPayIcon.svg';
 
 export function getIconFromBrandCode(brandCode: string) {
 	switch (brandCode) {
@@ -42,6 +43,8 @@ export function getIconFromBrandCode(brandCode: string) {
 			return JCB;
 		case 'VPAY':
 			return VPay;
+		case 'UNIONPAY':
+			return UnionPay;
 		case 'UNKNOWN':
 			return CreditCardPlaceholder;
 		default:
@@ -62,6 +65,7 @@ export const getBrandByCardNumber = (cardNumber: string) => {
 
 	const diners = new RegExp('^3[0689][0-9]{12}[0-9]*$');
 	const jcb = new RegExp('^35[0-9]{14}[0-9]*$');
+	const unionpay = new RegExp('^(62|81|88)[0-9]{14,17}$');
 
 	if (visa.test(cardNumber)) {
 		return getIconFromBrandCode('VISA');
@@ -80,6 +84,9 @@ export const getBrandByCardNumber = (cardNumber: string) => {
 	}
 	if (jcb.test(cardNumber)) {
 		return getIconFromBrandCode('JCB');
+	}
+	if (unionpay.test(cardNumber)) {
+		return getIconFromBrandCode('UNIONPAY');
 	}
 
 	return CreditCardPlaceholder;
