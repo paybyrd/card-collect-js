@@ -11,6 +11,7 @@ export type CardCollectProps = {
 	validateOnChange?: boolean;
 	displayHelpIcons?: boolean;
 	onCardCollectFrameLoaded?: () => void;
+	onCardBrandCodeChange?: (brandCode: string) => void;
 };
 export type SubmitBody = {
 	number?: string;

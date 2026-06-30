@@ -27,6 +27,7 @@ export type CardCollectProps = {
 	i18nMessages?: Record<i18nMessagesTypes, string>;
 	onCardCollectFrameLoaded?: () => void;
 	onDCCData?: (dccData: unknown) => void;
+	onCardBrandCodeChange?: (brandCode: string) => void;
 	pciFieldsBasePath?: string;
 	dccUrl?: string;
 	version?: number;

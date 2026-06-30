@@ -12,6 +12,7 @@ const handleCardCollectV2 = ({
 	onCardCollectFrameLoaded,
 	onFieldChange,
 	onDCCData,
+	onCardBrandCodeChange,
 	pciFieldsBasePath,
 	dccUrl,
 	validateOnFrame,
@@ -34,6 +35,10 @@ const handleCardCollectV2 = ({
 
 		if (event.data.type === 'PB_PCI_DCC_DATA') {
 			onDCCData?.(event.data);
+		}
+
+		if (event.data.type === 'PB_PCI_CARD_BRAND') {
+			onCardBrandCodeChange?.(event.data.brand);
 		}
 	};
 
