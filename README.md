@@ -54,20 +54,29 @@ export default () => {
 				const cardCollect = await CardCollect({
 					displayErrors: true, // Optional. It will display error messages automatically without any extra configurations
 					onFieldChange: handleFieldChange, // Optional. It will retrieve an object with metadata to perform extra validations
-					validateOnChange: true // Optional [default true]. It will validate on change even before form submission
-					displayHelpIcons: true, // Optional [default false]. It will display the CVV and Expiry Date placeholder icons inside the input,
-					i18nMessages: { // Optional [default null]. It will override the default validation messages before submitting fields so it can be translated to different languages
+					onCardCollectFrameLoaded: () => console.log('PCI fields loaded'), // Optional. Called once every secure iframe field finishes loading
+					onCardBrandCodeChange: (brandCode) => console.log('Detected card brand', brandCode), // Optional. Called whenever the detected card brand changes (empty when no brand is resolved)
+					css: '.input { color: black; }', // Optional. Custom CSS string injected into each PCI iframe to style the inputs
+					validateOnFrame: true, // Optional [default true]. When true, validation errors are also rendered inside the iframe field
+					i18nMessages: { // Optional [default null]. It will override the default validation messages and field placeholders so they can be translated to different languages
 						requiredField: 'Validation message that overrides the default one',
 						invalidCardNumber: 'Validation message that overrides the default one',
 						invalidExpirationDate: 'Validation message that overrides the default one',
-						invalidCVV: 'Validation message that overrides the default one')
-					},
+						expiredCard: 'Validation message that overrides the default one',
+						invalidCVV: 'Validation message that overrides the default one',
+						holderName: 'Card Holder',
+						cardNumber: 'Card Number',
+						expDate: 'MM/YY',
+						cvv: 'CVV'
+					}
 				});
 				setCardCollect(cardCollect);
 			}
 		};
 
 		setup();
+
+		return () => cc?.destroy?.(); // Optional. Removes the iframe message listeners when the component unmounts
 	}, []);
 
 	return (
@@ -110,12 +119,17 @@ export default () => {
 				this.cardCollect = await CardCollect({
 					displayErrors: true, // Optional. It will display error messages automatically without any extra configurations
 					onFieldChange: handleFieldChange, // Optional. It will retrieve an object with metadata to perform extra validations
-					validateOnChange: true // Optional [default true]. It will validate on change even before form submission
-					displayHelpIcons: true, // Optional [default false]. It will display the CVV and Expiry Date placeholder icons inside the input
+					onCardCollectFrameLoaded: () => console.log('PCI fields loaded'), // Optional. Called once every secure iframe field finishes loading
+					onCardBrandCodeChange: (brandCode) => console.log('Detected card brand', brandCode), // Optional. Called whenever the detected card brand changes (empty when no brand is resolved)
+					css: '.input { color: black; }', // Optional. Custom CSS string injected into each PCI iframe to style the inputs
+					validateOnFrame: true // Optional [default true]. When true, validation errors are also rendered inside the iframe field
 				});
 			};
 
 			setup();
+		},
+		beforeUnmount() {
+			this.cardCollect?.destroy?.(); // Optional. Removes the iframe message listeners when the component unmounts
 		}
 	};
 </script>
@@ -165,12 +179,15 @@ Please use dist/cardCollect-web.js and include it in your html file
 			};
 
 			// Paybyrd card collect initialization
-			const { cardCollect_submit } = await cardCollect({
+			const { cardCollect_submit, destroy } = await cardCollect({
 				displayErrors: true, // Optional. It will display error messages automatically without any extra configurations
 				onFieldChange: handleFieldChange, // Optional. It will retrieve an object with metadata to perform extra validations
-				validateOnChange: true // Optional [default true]. It will validate on change even before form submission
-				displayHelpIcons: true, // Optional [default false]. It will display the CVV and Expiry Date placeholder icons inside the input
+				onCardCollectFrameLoaded: () => console.log('PCI fields loaded'), // Optional. Called once every secure iframe field finishes loading
+				onCardBrandCodeChange: (brandCode) => console.log('Detected card brand', brandCode), // Optional. Called whenever the detected card brand changes (empty when no brand is resolved)
+				css: '.input { color: black; }', // Optional. Custom CSS string injected into each PCI iframe to style the inputs
+				validateOnFrame: true // Optional [default true]. When true, validation errors are also rendered inside the iframe field
 			});
+			// Call destroy() when tearing down the form to remove the iframe message listeners
 
 			// Form setup
 			document.getElementById('submit-form').onclick = handleSubmit;
