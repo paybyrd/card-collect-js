@@ -19,7 +19,12 @@ export default async ({
 	dccUrl,
 	css,
 	validateOnFrame = true,
-	env = 'production'
+	env = 'production',
+	autoTokenize,
+	autoTokenizeDebounceMs,
+	reuseTokenOnSubmit,
+	onFormStateChange,
+	onTokenChange
 }: CardCollectProps = {}): Promise<CardCollectResponse> => {
 	if (version === 2) {
 		return handleCardCollectV2({
@@ -33,7 +38,12 @@ export default async ({
 			displayErrors,
 			css,
 			validateOnFrame,
-			env
+			env,
+			autoTokenize,
+			autoTokenizeDebounceMs,
+			reuseTokenOnSubmit,
+			onFormStateChange,
+			onTokenChange
 		});
 	}
 

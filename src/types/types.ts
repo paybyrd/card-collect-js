@@ -6,6 +6,31 @@ type FieldChangeProps = {
 	isValid: boolean;
 };
 
+export type CardFieldId = 'cc-holder' | 'cc-number' | 'cc-expiration-date' | 'cc-cvc';
+
+export type CardFieldState = {
+	isEmpty: boolean;
+	isValid: boolean;
+	errorType: string | null;
+};
+
+// What the PCI frames post on every keystroke. Never carries the value.
+export type FieldChangeEvent = CardFieldState & {
+	type: string;
+	field: CardFieldId;
+};
+
+export type CardFormState = {
+	fields: Partial<Record<CardFieldId, CardFieldState>>;
+	isValid: boolean;
+};
+
+export type CardToken = {
+	tokenId: string;
+	cardTokenIds: string[];
+	correlationId: string;
+};
+
 type i18nMessagesTypes =
 	| 'requiredField'
 	| 'invalidCardNumber'
@@ -21,7 +46,7 @@ export type ENV = 'stage' | 'production';
 
 export type CardCollectProps = {
 	displayErrors?: boolean;
-	onFieldChange?: ({ fieldId, element, error, value, isValid }: FieldChangeProps) => void;
+	onFieldChange?: (data: FieldChangeProps | FieldChangeEvent) => void;
 	validateOnChange?: boolean;
 	displayHelpIcons?: boolean;
 	i18nMessages?: Record<i18nMessagesTypes, string>;
@@ -34,6 +59,11 @@ export type CardCollectProps = {
 	css?: string;
 	validateOnFrame?: boolean;
 	env?: ENV;
+	autoTokenize?: boolean;
+	autoTokenizeDebounceMs?: number;
+	reuseTokenOnSubmit?: boolean;
+	onFormStateChange?: (state: CardFormState) => void;
+	onTokenChange?: (token: CardToken | null) => void;
 };
 
 export type IFrameValuesPostMessageResponse = {

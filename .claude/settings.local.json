@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(./node_modules/.bin/tsc --noEmit)",
+      "Bash(ls node_modules/.bin/ts*)",
+      "Bash(./node_modules/typescript/bin/tsc --noEmit)",
+      "Bash(yarn tsc:*)",
+      "Bash(ls:*)",
+      "Bash(grep -E \"\\\\.\\(js|ts|json\\)$\")",
+      "Bash(npm view *)",
+      "Bash(git fetch *)"
+    ]
+  }
+}
